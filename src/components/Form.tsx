@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 
 function Form() {
   const [question, setQuestion] = useState('');
+  const [option, setOption] = useState({})
   const [selectedOption, setSelectedOption] = useState('');
-  const [rightAnswer, setRightAnswer] = useState(false)
 
   interface Option {
     text: string;
     isTrue: boolean;
+    class: string;
   }
   
   interface Question {
@@ -24,10 +25,13 @@ function Form() {
   }
   const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuestion(e.target.value);
+    
   };
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedOption(e.target.value);
+    setOption({...option, [e.target.className]: e.target.value})
+    console.log(option)
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,9 +41,9 @@ function Form() {
     // You can handle form submission here
   };
 
-  function itWorks(e :any){
+ 
+  function chooseRightAnswer(e :any){
     setSelectedOption(e.target.className)
-    setRightAnswer()
   }
   
 
@@ -64,7 +68,7 @@ function Form() {
             className='Option-1'  
             onChange={handleOptionChange} 
           />
-          <input type='radio' name="options"  className='Option-1'checked={selectedOption === 'Option-1'}  onClick={itWorks}></input>
+          <input type='radio' name="options"  className='Option-1'checked={selectedOption === 'Option-1'}  onClick={chooseRightAnswer}></input>
 
         </div>
         <div>
@@ -77,7 +81,7 @@ function Form() {
             
             onChange={handleOptionChange} 
           />
-          <input type='radio' name="options" className='Option-2' checked={selectedOption === 'Option-2'} onClick={itWorks}></input>
+          <input type='radio' name="options" className='Option-2' checked={selectedOption === 'Option-2'} onClick={chooseRightAnswer}></input>
         </div>
         <div>
           <input 
@@ -90,7 +94,7 @@ function Form() {
             onChange={handleOptionChange} 
             
           />
-          <input type='radio' name="options" className='Option-3'checked={selectedOption === 'Option-3'}onClick={itWorks}></input>
+          <input type='radio' name="options" className='Option-3'checked={selectedOption === 'Option-3'}onClick={chooseRightAnswer}></input>
 
         </div>
         <div>
@@ -102,13 +106,13 @@ function Form() {
             className='Option-4'
             onChange={handleOptionChange} 
           />
-          <input type='radio' name="options" className='Option-4' checked={selectedOption === 'Option-4'} onClick={itWorks}></input>
+          <input type='radio' name="options" className='Option-4' checked={selectedOption === 'Option-4'} onClick={chooseRightAnswer}></input>
 
         </div>
       </div>
       <button>add option</button>
       <button>add form</button>
-      <button type="submit">Submit</button>
+      <button type="submit" >Submit</button>
     </form>
   );
 }
