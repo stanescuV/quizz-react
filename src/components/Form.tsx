@@ -67,6 +67,17 @@ function Form() {
     
   };
 
+  const chooseRightAnswer = (e: React.ChangeEvent<HTMLInputElement>, questionKey: string) => {
+    setFormular(prev => ({
+      ...prev,
+      [questionKey]: {
+        ...prev[questionKey],
+        selectedOption: e.target.id
+      }
+    }));
+  };
+
+  // Form submission handler
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
    
@@ -109,4 +120,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default FormComponent;
