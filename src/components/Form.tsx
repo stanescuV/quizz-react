@@ -1,54 +1,80 @@
 import React, { useState } from 'react';
 
 function Form() {
-  const [question, setQuestion] = useState('');
-  const [option, setOption] = useState({})
-  const [selectedOption, setSelectedOption] = useState('');
-  //implement this
-  const [questionId, setQuestionId] = useState("1");
+
+  // Interfaces
 
   interface Option {
-    text: string;
-    isTrue: boolean;
-    class: string;
+    [key:string]: string; //dynamic key and inside the real text of the option
   }
-  
   interface Question {
     question: string;
-    options: Option[];
-  }
-  
-  interface Form {
-    questions: Question[];
-  }
-  
-  interface FormsData {
-    forms: Form[];
+    options: Option;
+    selectedOption: string; // the key of the correct answer
   }
 
-  const verification = ()=>{
-    console.log(option)
+  interface Formular {
+    [key: string]: Question;
   }
+
+  const [formular, setFormular] = useState<Formular>({
+    question1: {
+      question: "",
+      options: {
+        option1: "Option 1 Text",
+        option2: "Option 2 Text",
+        option3: "Option 3 Text",
+        option4: "Option 4 Text",
+      },
+      selectedOption: ""
+    }
+  });
+ 
+  const setTextQuestion = (formularKey: keyof Formular, text: string) => {
+    setFormular(prevFormular => ({
+      ...prevFormular, [formularKey]: {
+        ...prevFormular[formularKey],
+        question:text,
+      }
+    })) 
+  }
+
+  const setTextOption = (formularKey: keyof Formular, text: string, optionKey: string)=> {
+    setFormular(prevFormular => ({
+      ...prevFormular, [formularKey]:{
+        ...prevFormular[formularKey],
+        options:{...prevFormular[formularKey].options, [optionKey]: text}
+      }
+    }))
+  }
+
+  const setSelectedOption = (formularKey: keyof Formular, text: string) => {
+    setFormular(prevFormular => ({
+      ...prevFormular, [formularKey]:{
+        ...prevFormular[formularKey],
+        selectedOption : text,
+      }
+    }))
+  }
+
+ 
   const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuestion(e.target.value);
+    
     
   };
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>)  => {
-    setSelectedOption(e.target.value);
-    setOption({...option, [e.target.className]: e.target.value})
-    console.log(option)
+    
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Question:', question);
-    console.log('Selected Option:', selectedOption);
+   
   };
 
  
   function chooseRightAnswer(e :any){
-    setSelectedOption(e.target.className)
+    
   }
   
 
@@ -58,8 +84,6 @@ function Form() {
         <label>Question:</label>
         <input 
           type="text" 
-          id={questionId}
-          value={question} 
           onChange={handleQuestionChange} 
           placeholder="Enter your question here" 
         />
@@ -74,45 +98,7 @@ function Form() {
             className='Option-1'  
             onChange={handleOptionChange} 
           />
-          <input type='radio' name="options"  className='Option-1' checked={selectedOption === 'Option-1'}  onChange={chooseRightAnswer}></input>
-
-        </div>
-        <div>
-          <input 
-            type="text"
-            placeholder='option 2'
-            id="option2" 
-            className='Option-2'
-            name="option" 
-            
-            onChange={handleOptionChange} 
-          />
-          <input type='radio' name="options" className='Option-2'  checked={selectedOption === 'Option-2'} onChange={chooseRightAnswer}></input>
-        </div>
-        <div>
-          <input 
-            type="text" 
-            id="option3" 
-            placeholder='option 3'
-            className='Option-3'
-            name="option" 
-             
-            onChange={handleOptionChange} 
-            
-          />
-          <input type='radio' name="options" className='Option-3' checked={selectedOption === 'Option-3'} onChange={chooseRightAnswer}></input>
-
-        </div>
-        <div>
-          <input 
-            type="text" 
-            id="option4" 
-            name="option" 
-            placeholder='option 4'
-            className='Option-4'
-            onChange={handleOptionChange} 
-          />
-          <input type='radio' name="options" className='Option-4'  checked={selectedOption === 'Option-4'} onChange={chooseRightAnswer}></input>
+          <input type='radio' name="options"  className='Option-1' onChange={chooseRightAnswer}></input>
 
         </div>
       </div>
