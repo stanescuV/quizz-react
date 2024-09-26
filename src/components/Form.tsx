@@ -17,6 +17,7 @@ function Form() {
     [key: string]: Question;
   }
 
+  //The global form we are going to modify along the way 
   const [formular, setFormular] = useState<Formular>({
     question1: {
       question: "",
@@ -30,6 +31,8 @@ function Form() {
     }
   });
  
+
+  //modify the formular state
   const setTextQuestion = (formularKey: keyof Formular, text: string) => {
     setFormular(prevFormular => ({
       ...prevFormular, [formularKey]: {
@@ -57,67 +60,79 @@ function Form() {
     }))
   }
 
- 
-  const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    
-    
+  //jsx methods
+  const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
+    setTextQuestion(formularKey, e.target.value);
   };
 
-  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>)  => {
-    
+  const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
+    const optionKey = e.target.name; 
+    setTextOption(formularKey, e.target.value, optionKey);
   };
 
-  const chooseRightAnswer = (e: React.ChangeEvent<HTMLInputElement>, questionKey: string) => {
-    setFormular(prev => ({
-      ...prev,
-      [questionKey]: {
-        ...prev[questionKey],
-        selectedOption: e.target.id
-      }
-    }));
-  };
-
-  // Form submission handler
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   
+    console.log(formular);
   };
 
- 
-  function chooseRightAnswer(e :any){
-    
+
+  const chooseRightAnswer = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
+    const selectedOptionKey = e.target.id;
+    setSelectedOption(formularKey, selectedOptionKey);
+  };
+
+  //render stuff on screen
+  const renderQuestion = (questionKey: keyof Formular) => {
+    const questionData = formular[questionKey];
+    const options = questionData.options
+    return (
+      <div className="questionContainer" key={questionKey} id={`${questionKey}`}>
+        <label>Question:</label>
+        <input 
+          type="text"
+          value={questionData.question} 
+          onChange={(e) =>handleQuestionChange(e, questionKey)} 
+          placeholder="Enter your question here" 
+        />
+        <div className={`optionsContainer-${questionKey}`}>
+          {Object.entries(options).map(([key, text]) => (
+            <div key={key}>
+              <input
+                type="text"
+                name={key}
+                placeholder={`${text}`}
+                value={text}
+                onChange={(e) => handleOptionChange(e, questionKey)}
+              />
+              <input 
+                type='radio' 
+                name="options"  
+                id={key} 
+                onChange={(e) => chooseRightAnswer(e, 'question1')}
+                checked={questionData.selectedOption === `${key}`}
+              />
+
+            </div>
+            ))}
+        </div>
+      <button >add option</button>
+      </div>
+    )
+
   }
-  
+
+  const renderFormular = (formular: Formular) => {
+    const questionsOfForm = Object.keys(formular);
+    return questionsOfForm.map((key)=>renderQuestion(key))
+  }
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>Question:</label>
-        <input 
-          type="text" 
-          onChange={handleQuestionChange} 
-          placeholder="Enter your question here" 
-        />
-      </div>
-      <div>
-        <div>
-          <input 
-            type="text" 
-            placeholder='option 1'
-            id="option1" 
-            name="option"
-            className='Option-1'  
-            onChange={handleOptionChange} 
-          />
-          <input type='radio' name="options"  className='Option-1' onChange={chooseRightAnswer}></input>
-
-        </div>
-      </div>
-      <button onChange={verification}>add option</button>
+      <div>{renderFormular(formular)}</div>
       <button>add form</button>
       <button type="submit" >Submit</button>
     </form>
   );
 }
 
-export default FormComponent;
+export default Form;
