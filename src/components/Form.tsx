@@ -170,9 +170,10 @@ function Form() {
     const questionData = formular[questionKey];
     const options = questionData.options
     const selectedOption = questionData.selectedOption
+    const lastNumberOfTheQuestionKey = (questionKey as string).substring((questionKey as string).length - 1);
     return (
       <div className="questionContainer" key={questionKey} id={`${questionKey}`}>
-        <label>Question:</label>
+        <label>{`${lastNumberOfTheQuestionKey}. `}Question:</label>
         <input 
           type="text"
           value={questionData.question} 
