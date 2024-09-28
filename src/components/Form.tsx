@@ -109,6 +109,29 @@ function Form() {
     });
   };
 
+  const deleteOption = (formularKey: keyof Formular) => {
+    setFormular((prevFormular) => {
+      const currentOptions = { ...prevFormular[formularKey].options };
+      const optionKeys = Object.keys(currentOptions);
+      
+      if (optionKeys.length === 0) return prevFormular; // No options to delete
+  
+      const lastOptionKey = `option${optionKeys.length}`; // Find the last option key
+  
+      // Remove the last option
+      delete currentOptions[lastOptionKey];
+  
+      return {
+        ...prevFormular,
+        [formularKey]: {
+          ...prevFormular[formularKey],
+          options: currentOptions, // Return updated options without the deleted one
+        },
+      };
+    });
+  };
+  
+
   //jsx methods
   const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
     setTextQuestion(formularKey, e.target.value);
@@ -137,6 +160,10 @@ function Form() {
     const selectedOptionKey = e.target.id;
     setSelectedOption(formularKey, selectedOptionKey);
   };
+
+  const reinitializeForm = () => {
+    setFormular(defaultInput);
+  }
 
   //render stuff on screen
   const renderQuestion = (questionKey: keyof Formular) => {
@@ -169,11 +196,11 @@ function Form() {
                 onChange={(e) => chooseRightAnswer(e, questionKey)}
                 checked={selectedOption === key}
               />
-
             </div>
             ))}
         </div>
-      <button key={questionKey} id={`${questionKey}`} onClick={handleAddOption} >add option</button>
+        <button key={`${questionKey} +` } id={`${questionKey}`} onClick={handleAddOption} >+</button>
+        <button key={`${questionKey} -` } onClick={() => deleteOption(questionKey)} >-</button>
       </div>
     )
 
@@ -188,6 +215,7 @@ function Form() {
     <form onSubmit={handleSubmit}>
       <div>{renderFormular(formular)}</div>
       <button onClick={addQuestion}>add form</button>
+      <button onClick={reinitializeForm}> Reinitialize Form</button>
       <button type="submit" >Submit</button>
     </form>
   );
