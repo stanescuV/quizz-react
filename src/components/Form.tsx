@@ -17,8 +17,8 @@ function Form() {
     [key: string]: Question;
   }
 
-  //The global form we are going to modify along the way 
-  const [formular, setFormular] = useState<Formular>({
+  //Default input 
+  const defaultInput = {
     question1: {
       question: "",
       options: {
@@ -29,7 +29,24 @@ function Form() {
       },
       selectedOption: ""
     }
-  });
+  }
+
+  const dynamicDefaultInput = (newFormularKey : keyof Formular) => {
+    return {
+      [newFormularKey]: {
+        question: "",
+        options: {
+          option1: "",
+          option2: "",
+          option3: "",
+          option4: "",
+        },
+        selectedOption: ""
+      }}
+  }
+
+  //The global form we are going to modify along the way 
+  const [formular, setFormular] = useState<Formular>(defaultInput);
  
 
   //modify the formular state
@@ -42,6 +59,19 @@ function Form() {
     })) 
   }
 
+  const addQuestion = () => {
+    setFormular((prevFormular) => {
+      const currentQuestions = Object.keys(prevFormular); 
+      const questionCount = currentQuestions.length;
+      const newQuestionKey = `question${questionCount + 1}`;
+  
+      return {
+        ...prevFormular, 
+        ...dynamicDefaultInput(newQuestionKey as keyof Formular)  
+      };
+    });
+  };
+  
   const setTextOption = (formularKey: keyof Formular, text: string, optionKey: string)=> {
     setFormular(prevFormular => ({
       ...prevFormular, [formularKey]:{
@@ -78,7 +108,7 @@ function Form() {
       };
     });
   };
-  
+
   //jsx methods
   const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
     setTextQuestion(formularKey, e.target.value);
@@ -97,11 +127,11 @@ function Form() {
       addOption(questionKey as keyof Formular);  
     }
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formular);
   };
-
 
   const chooseRightAnswer = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
     const selectedOptionKey = e.target.id;
@@ -134,10 +164,10 @@ function Form() {
               />
               <input 
                 type='radio' 
-                name="options"  
+                name={`options-${questionKey}`}  
                 id={key} 
-                onChange={(e) => chooseRightAnswer(e, 'question1')}
-                checked={selectedOption === `${key}`}
+                onChange={(e) => chooseRightAnswer(e, questionKey)}
+                checked={selectedOption === key}
               />
 
             </div>
@@ -157,7 +187,7 @@ function Form() {
   return (
     <form onSubmit={handleSubmit}>
       <div>{renderFormular(formular)}</div>
-      <button>add form</button>
+      <button onClick={addQuestion}>add form</button>
       <button type="submit" >Submit</button>
     </form>
   );
