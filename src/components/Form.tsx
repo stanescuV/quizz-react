@@ -22,10 +22,10 @@ function Form() {
     question1: {
       question: "",
       options: {
-        option1: "Option 1 Text",
-        option2: "Option 2 Text",
-        option3: "Option 3 Text",
-        option4: "Option 4 Text",
+        option1: "",
+        option2: "",
+        option3: "",
+        option4: "",
       },
       selectedOption: ""
     }
@@ -60,6 +60,25 @@ function Form() {
     }))
   }
 
+  const addOption = (formularKey: keyof Formular) => {
+    setFormular((prevFormular) => {
+      const currentOptions = prevFormular[formularKey].options;
+      const optionCount = Object.keys(currentOptions).length; 
+      const newOptionKey = `option${optionCount + 1}`; 
+  
+      return {
+        ...prevFormular,
+        [formularKey]: {
+          ...prevFormular[formularKey],
+          options: {
+            ...currentOptions,
+            [newOptionKey]: "",  
+          },
+        },
+      };
+    });
+  };
+  
   //jsx methods
   const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
     setTextQuestion(formularKey, e.target.value);
@@ -70,6 +89,14 @@ function Form() {
     setTextOption(formularKey, e.target.value, optionKey);
   };
 
+  const handleAddOption = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const button = e.target as HTMLButtonElement;  
+    const questionKey = button.id; 
+  
+    if (Object.keys(formular).includes(questionKey)) {
+      addOption(questionKey as keyof Formular);  
+    }
+  };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formular);
@@ -85,6 +112,7 @@ function Form() {
   const renderQuestion = (questionKey: keyof Formular) => {
     const questionData = formular[questionKey];
     const options = questionData.options
+    const selectedOption = questionData.selectedOption
     return (
       <div className="questionContainer" key={questionKey} id={`${questionKey}`}>
         <label>Question:</label>
@@ -109,13 +137,13 @@ function Form() {
                 name="options"  
                 id={key} 
                 onChange={(e) => chooseRightAnswer(e, 'question1')}
-                checked={questionData.selectedOption === `${key}`}
+                checked={selectedOption === `${key}`}
               />
 
             </div>
             ))}
         </div>
-      <button >add option</button>
+      <button key={questionKey} id={`${questionKey}`} onClick={handleAddOption} >add option</button>
       </div>
     )
 
@@ -134,5 +162,6 @@ function Form() {
     </form>
   );
 }
+
 
 export default Form;
