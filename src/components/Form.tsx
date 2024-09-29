@@ -160,7 +160,7 @@ function Form() {
     setTextQuestion(formularKey, e.target.value);
   };
 
-  const handleDeleteQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDeleteQuestion = () => {
     deleteQuestion(questionToDelete);
   }
 
