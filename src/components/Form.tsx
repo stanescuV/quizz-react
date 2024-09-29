@@ -47,7 +47,8 @@ function Form() {
 
   //The global form we are going to modify along the way 
   const [formular, setFormular] = useState<Formular>(defaultInput);
- 
+  
+  const [questionToDelete, setQuestionToDelete] = useState("")
 
   //modify the formular state
   const setTextQuestion = (formularKey: keyof Formular, text: string) => {
@@ -131,11 +132,37 @@ function Form() {
     });
   };
   
+  const deleteQuestion = (stringWithQuestionNumbers: string) => {
+
+    const deleteQuestion = (number: number) => {
+      setFormular((prevFormular) => {
+        // Create a shallow copy of the previous formular object
+        const newFormular = { ...prevFormular };
+    
+        // Find the key (e.g., 'question1', 'question2', etc.) to delete
+        const questionKey = `question${number}`;
+        
+        // Delete the key from the new copy
+        delete newFormular[questionKey];
+  
+        return newFormular;
+      });
+    };
+
+    const arrayStrings = stringWithQuestionNumbers.split(",");
+    const numberArray = arrayStrings.map(item => Number(item.trim()));
+
+    numberArray.map((number) => deleteQuestion(number));
+  }
 
   //jsx methods
   const handleQuestionChange = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
     setTextQuestion(formularKey, e.target.value);
   };
+
+  const handleDeleteQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {
+    deleteQuestion(questionToDelete);
+  }
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
     const optionKey = e.target.name; 
@@ -217,6 +244,13 @@ function Form() {
       <div>{renderFormular(formular)}</div>
       <button onClick={addQuestion}>add form</button>
       <button onClick={reinitializeForm}> Reinitialize Form</button>
+      <input 
+          type="text"
+          value={questionToDelete} 
+          onChange={(e) =>setQuestionToDelete(e.target.value)} 
+          placeholder="Ex: 1, 2, 4..." 
+        />
+      <button onClick={handleDeleteQuestion}>Delete Question</button>
       <button type="submit" >Submit</button>
     </form>
   );
