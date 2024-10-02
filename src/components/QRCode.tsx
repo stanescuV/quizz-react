@@ -14,7 +14,6 @@ const QRCodeGenerator = () => {
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
       <h2>QR Code Generator</h2>
       
-      
       <input
         type="text"
         placeholder="Enter text or URL"

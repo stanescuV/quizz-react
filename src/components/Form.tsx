@@ -239,6 +239,7 @@ function Form() {
     return questionsOfForm.map((key)=>renderQuestion(key))
   }
 
+  // de facut functie de verificat formular pentru submit
   return (
     <form onSubmit={handleSubmit}>
       <div>{renderFormular(formular)}</div>

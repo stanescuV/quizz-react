@@ -1,15 +1,19 @@
-import './App.css'
-import QRCode1 from './components/QRCode'
-import QRCode from 'react-qr-code'
-import Form from './components/Form'
-function App() {
+import './App.css';
+import Home from './pages/home';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+
+const App: React.FC = () => {
   return (
-    <div>
-      <Form></Form>
-      {/* <QRCode value='hello '></QRCode> */}
-    </div>
-  )
-}
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+};
 
-export default App
+
+export default App;
