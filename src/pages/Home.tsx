@@ -1,9 +1,8 @@
-import React from 'react'
 import Form from '../components/Form'
 
 interface Props {}
 
-export default function home({}: Props) {
+export default function Home({}: Props) {
   return (
     <div>
         <Form />
