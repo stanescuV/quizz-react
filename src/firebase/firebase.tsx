@@ -1,5 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { Auth, createUserWithEmailAndPassword } from 'firebase/auth'
+
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -14,5 +16,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-export { auth };  // Export auth for usage in other files
+
+function signIn(auth: Auth, email: string, password:string) {
+  return createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+      // Signed up 
+      const user = userCredential.user;
+      console.log(user)
+  })
+  .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorMessage + errorCode)
+  });
+}
+
+
+
+export { auth, signIn };  // Export auth for usage in other files
 export default app;

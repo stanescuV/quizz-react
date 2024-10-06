@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signIn } from "../contexts/authContext";
+import { signIn } from "../firebase/firebase";
 import { auth } from "../firebase/firebase";
 
 function Login() {
