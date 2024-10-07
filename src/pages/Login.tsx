@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signIn } from "../firebase/firebase";
+import { createUser } from "../firebase/firebase";
 import { auth } from "../firebase/firebase";
 
 function Login() {
@@ -9,7 +9,7 @@ function Login() {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Add login logic here (e.g., API call)
-    signIn(auth, username, password);
+    createUser(auth, username, password);
     console.log("Username:", username);
     console.log("Password:", password);
   };

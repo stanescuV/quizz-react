@@ -17,7 +17,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 
-function signIn(auth: Auth, email: string, password:string) {
+async function createUser(auth: Auth, email: string, password:string) {
   return createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
       // Signed up 
@@ -33,5 +33,5 @@ function signIn(auth: Auth, email: string, password:string) {
 
 
 
-export { auth, signIn };  // Export auth for usage in other files
+export { auth, createUser };  // Export auth for usage in other files
 export default app;
