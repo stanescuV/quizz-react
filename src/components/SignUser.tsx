@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth"; // Import the signInWithEmailAndPassword method
 import { auth } from "../firebase/firebase"; // Import the auth instance
-
+import { useNavigate } from "react-router-dom";
 type Props = {}
 
 function SignUser({}: Props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-  
+    const navigate = useNavigate(); 
+
     const handleLogin = (event: React.FormEvent) => {
         event.preventDefault();
 
@@ -21,6 +22,7 @@ function SignUser({}: Props) {
             // Successful login
             const user = userCredential.user;
             console.log("Logged in successfully:", user);
+            navigate("/"); 
         })
         .catch((error) => {
             // Handle errors

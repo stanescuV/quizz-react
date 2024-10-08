@@ -162,6 +162,7 @@ function Form() {
 
   const handleDeleteQuestion = () => {
     deleteQuestion(questionToDelete);
+    setQuestionToDelete("")
   }
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
@@ -179,7 +180,7 @@ function Form() {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log(formular);
   };
 

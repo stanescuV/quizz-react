@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { createUser } from "../firebase/firebase";
 import { auth } from "../firebase/firebase";
+import { useNavigate } from "react-router-dom";
+
 
 function CreateAccount() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate(); 
+
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -24,6 +28,7 @@ function CreateAccount() {
     createUser(auth, username, password)
       .then(() => {
         console.log("Account created successfully");
+        navigate("/")
       })
       .catch((error) => {
         console.error("Error creating account:", error);
