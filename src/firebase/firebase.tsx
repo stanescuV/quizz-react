@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { Auth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 
 
 const firebaseConfig = {
@@ -31,7 +31,19 @@ async function createUser(auth: Auth, email: string, password:string) {
   });
 }
 
+async function signIn(username: string, password: string){
+  return signInWithEmailAndPassword(auth, username, password)
+  .then((userCredential) => {
+    // Successful login
+    const user = userCredential.user;
+    console.log("Logged in successfully:", user);
+  })
+  .catch((error) => {
+    console.error("Login error:", error);
+  });
+};
 
 
-export { auth, createUser };  // Export auth for usage in other files
+
+export { auth, createUser, signIn };  // Export auth for usage in other files
 export default app;
