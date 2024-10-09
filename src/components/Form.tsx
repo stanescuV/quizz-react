@@ -1,10 +1,24 @@
 import React, {useState} from 'react';
+import {db, addDoc, collection } from '../firebase/firebase';
 import type { FormEntity, QuestionDB, OptionDB } from '../entities/formDB';
-import { useAuth } from '../firebase/authContext';
+import { useAuth} from '../firebase/authContext';
 
 function Form() {
   //User
   const {currentUser} = useAuth();
+
+  // DB 
+  const addFormDb = async (form: FormEntity) => {
+
+    try{
+      const DbFirebaseForms = collection(db, 'forms');
+      addDoc(DbFirebaseForms, form)
+      .then(()=> console.log("it worked"))
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   // Interfaces
 
@@ -208,6 +222,7 @@ function Form() {
     const uid = currentUser.uid;
     if(uid){
       const dbForm = convertFormularToFormEntity(formular, formName, uid);
+      addFormDb(dbForm);
       console.log(dbForm);
     }
   };

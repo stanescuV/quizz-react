@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore, collection, addDoc, setDoc, doc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -14,6 +15,7 @@ const firebaseConfig = {
 // Initialize Firebase app
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
+const db = getFirestore(app);
 
 // UID and user state
 let currentUser;
@@ -41,6 +43,6 @@ async function signIn(email: string, password:string) {
 }
 
 // Export Firebase utilities
-export { auth, createUser, signIn };
+export { auth, createUser, signIn, db, addDoc, setDoc, collection, doc };
 export default app;
 
