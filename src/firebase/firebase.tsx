@@ -1,7 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -13,37 +11,36 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
+// Initialize Firebase app
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const auth = getAuth(app); 
 
+// UID and user state
+let currentUser;
 
-async function createUser(auth: Auth, email: string, password:string) {
-  return createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-      // Signed up 
-      const user = userCredential.user;
-      console.log(user)
-  })
-  .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorMessage + errorCode)
-  });
+// Create a new user
+async function createUser(email: string, password:string) {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    currentUser = userCredential.user;
+    console.log("User created:", currentUser);
+  } catch (error:any) {
+    console.error("Error creating user:", error.message);
+  }
 }
 
-async function signIn(username: string, password: string){
-  return signInWithEmailAndPassword(auth, username, password)
-  .then((userCredential) => {
-    // Successful login
-    const user = userCredential.user;
-    console.log("Logged in successfully:", user);
-  })
-  .catch((error) => {
-    console.error("Login error:", error);
-  });
-};
+// Sign in an existing user
+async function signIn(email: string, password:string) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    currentUser = userCredential.user;
+    console.log("Logged in successfully:");
+  } catch (error: any) {
+    console.error("Login error:", error.message);
+  }
+}
 
-
-
-export { auth, createUser, signIn };  // Export auth for usage in other files
+// Export Firebase utilities
+export { auth, createUser, signIn };
 export default app;
+

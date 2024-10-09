@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { createUser } from "../firebase/firebase";
-import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
 
@@ -25,7 +24,7 @@ function CreateAccount() {
     }
 
     // Add login logic here (e.g., API call)
-    createUser(auth, username, password)
+    createUser( username, password)
       .then(() => {
         console.log("Account created successfully");
         navigate("/")

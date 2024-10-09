@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import type { FormEntity, QuestionDB, OptionDB } from '../entities/formDB';
+import { useAuth } from '../firebase/authContext';
 
 function Form() {
+  //User
+  const {currentUser} = useAuth();
 
   // Interfaces
 
@@ -47,9 +51,29 @@ function Form() {
 
   //The global form we are going to modify along the way 
   const [formular, setFormular] = useState<Formular>(defaultInput);
-  
-  const [questionToDelete, setQuestionToDelete] = useState("")
+  const [questionToDelete, setQuestionToDelete] = useState("");
+  const [formName, setFormName] = useState("");
 
+
+  function convertFormularToFormEntity(formular: Formular, name: string, host: string): FormEntity {
+    const questions: QuestionDB[] = Object.values(formular).map((q) => {
+        const options: OptionDB[] = Object.keys(q.options).map((key) => ({
+            isSelected: key === q.selectedOption,
+            [key]: q.options[key], // You can choose to set option1 or option2 dynamically here
+        }));
+
+        return {
+            question: q.question,
+            options: options,
+        };
+    });
+
+    return {
+        host,
+        name,
+        questions,
+    };
+} 
   //modify the formular state
   const setTextQuestion = (formularKey: keyof Formular, text: string) => {
     setFormular(prevFormular => ({
@@ -180,8 +204,12 @@ function Form() {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    // e.preventDefault();
-    console.log(formular);
+    e.preventDefault();
+    const uid = currentUser.uid;
+    if(uid){
+      const dbForm = convertFormularToFormEntity(formular, formName, uid);
+      console.log(dbForm);
+    }
   };
 
   const chooseRightAnswer = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
@@ -228,8 +256,8 @@ function Form() {
             </div>
             ))}
         </div>
-        <button key={`${questionKey} +` } id={`${questionKey}`} onClick={handleAddOption} >+</button>
-        <button key={`${questionKey} -` } onClick={() => deleteOption(questionKey)} >-</button>
+        <button type="button" key={`${questionKey} +` } id={`${questionKey}`} onClick={handleAddOption} >+</button>
+        <button type="button" key={`${questionKey} -` } onClick={() => deleteOption(questionKey)} >-</button>
       </div>
     )
 
@@ -242,19 +270,26 @@ function Form() {
 
   // de facut functie de verificat formular pentru submit
   return (
-    <form onSubmit={handleSubmit}>
-      <div>{renderFormular(formular)}</div>
-      <button onClick={addQuestion}>add form</button>
-      <button onClick={reinitializeForm}> Reinitialize Form</button>
-      <input 
-          type="text"
-          value={questionToDelete} 
-          onChange={(e) =>setQuestionToDelete(e.target.value)} 
-          placeholder="Ex: 1, 2, 4..." 
-        />
-      <button onClick={handleDeleteQuestion}>Delete Question</button>
-      <button type="submit" >Submit</button>
-    </form>
+    <div>
+      <label style={{marginRight:"10px"}}>Form Name</label>
+      <input  type="text"
+            value={formName} 
+            onChange={(e) =>setFormName(e.target.value)} 
+            placeholder="Math Form, Fun form, quizz..."></input>
+      <form onSubmit={handleSubmit}>
+        <div>{renderFormular(formular)}</div>
+        <button type="button" onClick={addQuestion}>add form</button>
+        <button type="button" onClick={reinitializeForm}> Reinitialize Form</button>
+        <input 
+            type="text"
+            value={questionToDelete} 
+            onChange={(e) =>setQuestionToDelete(e.target.value)} 
+            placeholder="Ex: 1, 2, 4..." 
+            />
+        <button type="button" onClick={handleDeleteQuestion}>Delete Question</button>
+        <button type="submit" >Submit</button>
+      </form>
+    </div>
   );
 }
 
