@@ -24,7 +24,7 @@ function CreateAccount() {
     }
 
     // Add login logic here (e.g., API call)
-    createUser( username, password)
+    createUser(username, password)
       .then(() => {
         console.log("Account created successfully");
         navigate("/")

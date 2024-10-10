@@ -42,7 +42,20 @@ function Form() {
   const [formName, setFormName] = useState("");
 
 
-  //this
+  //test if everything works before convert
+  const testFormOk = (formular: Formular) => {
+    console.log("Checking form data:", formular);
+    return Object.keys(formular).every((questionKey) => {
+      const isSelected = formular[questionKey].selectedOption !== "";
+      console.log("Question:", questionKey, "Selected Option:", formular[questionKey].selectedOption, "Is selected?", isSelected);
+      return isSelected;
+    });
+  };
+  
+  
+  
+
+  //this converts the formular from the frontend entity into the DB entity
   function convertFormularToFormEntity(formular: Formular, name: string, host: string): FormEntity {
     const questions: QuestionDB[] = Object.values(formular).map((q) => {
         const options: OptionDB[] = Object.keys(q.options).map((key) => ({
@@ -193,14 +206,21 @@ function Form() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const uid = currentUser.uid;
-    if(uid){
-      const dbForm = convertFormularToFormEntity(formular, formName, uid);
-      addFormDb(dbForm);
-      console.log(dbForm);
+  
+    if (testFormOk(formular)) {
+      const uid = currentUser?.uid;
+      if (uid) {
+        const dbForm = convertFormularToFormEntity(formular, formName, uid);
+        addFormDb(dbForm);  // Save form data to the database
+        console.log("Form submitted:", dbForm);
+      } else {
+        window.alert("User ID is missing.");
+      }
+    } else {
+      window.alert("The form is not completed correctly, please check the selected answers.");
     }
   };
-
+  
   const chooseRightAnswer = (e: React.ChangeEvent<HTMLInputElement>, formularKey: keyof Formular) => {
     const selectedOptionKey = e.target.id;
     setSelectedOption(formularKey, selectedOptionKey);
