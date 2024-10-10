@@ -1,39 +1,12 @@
 import React, {useState} from 'react';
-import {db, addDoc, collection } from '../firebase/firebase';
 import type { FormEntity, QuestionDB, OptionDB } from '../entities/formDB';
 import { useAuth} from '../firebase/authContext';
+import { Formular } from '../entities/form';
+import { addFormDb } from '../firebase/firestore';
 
 function Form() {
   //User
   const {currentUser} = useAuth();
-
-  // DB 
-  const addFormDb = async (form: FormEntity) => {
-
-    try{
-      const DbFirebaseForms = collection(db, 'forms');
-      addDoc(DbFirebaseForms, form)
-      .then(()=> console.log("it worked"))
-
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  // Interfaces
-
-  interface Option {
-    [key:string]: string; //dynamic key and inside the real text of the option
-  }
-  interface Question {
-    question: string;
-    options: Option;
-    selectedOption: string; // the key of the correct answer
-  }
-
-  interface Formular {
-    [key: string]: Question;
-  }
 
   //Default input 
   const defaultInput = {
@@ -69,6 +42,7 @@ function Form() {
   const [formName, setFormName] = useState("");
 
 
+  //this
   function convertFormularToFormEntity(formular: Formular, name: string, host: string): FormEntity {
     const questions: QuestionDB[] = Object.values(formular).map((q) => {
         const options: OptionDB[] = Object.keys(q.options).map((key) => ({
