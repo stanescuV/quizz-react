@@ -3,6 +3,7 @@ import type { FormEntity, QuestionDB, OptionDB } from '../entities/formDB';
 import { useAuth} from '../firebase/authContext';
 import { Formular } from '../entities/form';
 import { addFormDb } from '../firebase/firestore';
+import { testEverything } from '../tests/testForm';
 
 function Form() {
   //User
@@ -41,18 +42,6 @@ function Form() {
   const [questionToDelete, setQuestionToDelete] = useState("");
   const [formName, setFormName] = useState("");
 
-
-  //test if everything works before convert
-  const testFormOk = (formular: Formular) => {
-    console.log("Checking form data:", formular);
-    return Object.keys(formular).every((questionKey) => {
-      const isSelected = formular[questionKey].selectedOption !== "";
-      console.log("Question:", questionKey, "Selected Option:", formular[questionKey].selectedOption, "Is selected?", isSelected);
-      return isSelected;
-    });
-  };
-  
-  
   
 
   //this converts the formular from the frontend entity into the DB entity
@@ -140,12 +129,18 @@ function Form() {
       const currentOptions = { ...prevFormular[formularKey].options };
       const optionKeys = Object.keys(currentOptions);
       
-      if (optionKeys.length === 0) return prevFormular; // No options to delete
+      if (optionKeys.length === 0) return prevFormular; 
   
-      const lastOptionKey = `option${optionKeys.length}`; // Find the last option key
-  
+      const lastOptionKey = `option${optionKeys.length}`;
+      
+      if(lastOptionKey === formular[formularKey].selectedOption){
+        setSelectedOption(formularKey, "")
+      }
+      
       // Remove the last option
       delete currentOptions[lastOptionKey];
+
+      
   
       return {
         ...prevFormular,
@@ -206,8 +201,7 @@ function Form() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
-    if (testFormOk(formular)) {
+    if (testEverything(formular, formName)) {
       const uid = currentUser?.uid;
       if (uid) {
         const dbForm = convertFormularToFormEntity(formular, formName, uid);
@@ -217,7 +211,7 @@ function Form() {
         window.alert("User ID is missing.");
       }
     } else {
-      window.alert("The form is not completed correctly, please check the selected answers.");
+      window.alert("The form is not completed correctly.");
     }
   };
   
@@ -232,10 +226,12 @@ function Form() {
 
   //render stuff on screen
   const renderQuestion = (questionKey: keyof Formular) => {
+
     const questionData = formular[questionKey];
-    const options = questionData.options
-    const selectedOption = questionData.selectedOption
+    const options = questionData.options;
+    const selectedOption = questionData.selectedOption;
     const lastNumberOfTheQuestionKey = (questionKey as string).substring((questionKey as string).length - 1);
+
     return (
       <div className="questionContainer" key={questionKey} id={`${questionKey}`}>
         <label>{`${lastNumberOfTheQuestionKey}. `}Question:</label>
