@@ -3,12 +3,14 @@ import { db } from "./firebase";
 import { FormEntity } from "../entities/formDB";
 
 
+// use this to insert a form in the DB
 const addFormDb = async (form: FormEntity) => {
 
     try{
       const DbFirebaseForms = collection(db, 'forms');
-      addDoc(DbFirebaseForms, form)
-      .then(()=> console.log("it worked"))
+      const docRef = await addDoc(DbFirebaseForms, form);
+      const id = docRef.id;
+      return id
 
     } catch (err) {
       console.log(err)

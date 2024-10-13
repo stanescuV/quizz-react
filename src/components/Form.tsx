@@ -4,6 +4,7 @@ import { useAuth} from '../firebase/authContext';
 import { Formular } from '../entities/form';
 import { addFormDb } from '../firebase/firestore';
 import { testEverything } from '../tests/testForm';
+import QRCodeGenerator from './QRCode';
 
 function Form() {
   //User
@@ -41,27 +42,28 @@ function Form() {
   const [formular, setFormular] = useState<Formular>(defaultInput);
   const [questionToDelete, setQuestionToDelete] = useState("");
   const [formName, setFormName] = useState("");
+  const [idForm, setIdForm] = useState("");
 
   
-
+  // n2 // de modificat sa fie mai clara
   //this converts the formular from the frontend entity into the DB entity
   function convertFormularToFormEntity(formular: Formular, name: string, host: string): FormEntity {
     const questions: QuestionDB[] = Object.values(formular).map((q) => {
         const options: OptionDB[] = Object.keys(q.options).map((key) => ({
-            isSelected: key === q.selectedOption,
-            [key]: q.options[key], // You can choose to set option1 or option2 dynamically here
+          isSelected: key === q.selectedOption,
+          [key]: q.options[key], // You can choose to set option1 or option2 dynamically here
         }));
 
         return {
-            question: q.question,
-            options: options,
+          question: q.question,
+          options: options,
         };
     });
 
     return {
-        host,
-        name,
-        questions,
+      host,
+      name,
+      questions,
     };
 } 
   //modify the formular state
@@ -199,19 +201,23 @@ function Form() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (testEverything(formular, formName)) {
-      const uid = currentUser?.uid;
-      if (uid) {
-        const dbForm = convertFormularToFormEntity(formular, formName, uid);
-        addFormDb(dbForm);  // Save form data to the database
-        console.log("Form submitted:", dbForm);
-      } else {
-        window.alert("User ID is missing.");
-      }
+
+    if (!testEverything(formular)) {
+      return window.alert("The form is not completed correctly.");
+    } 
+
+    const uid = currentUser?.uid;
+    if (uid) {
+      const dbForm = convertFormularToFormEntity(formular, formName, uid);
+
+      // www.quizzReact.com/form/?id 
+      setIdForm((await addFormDb(dbForm)) as string);  // Save form data to the database
+
+      console.log("Form submitted:", dbForm);
     } else {
-      window.alert("The form is not completed correctly.");
+      window.alert("User ID is missing.");
     }
   };
   
@@ -294,6 +300,8 @@ function Form() {
         <button type="button" onClick={handleDeleteQuestion}>Delete Question</button>
         <button type="submit" >Submit</button>
       </form>
+
+      {idForm && QRCodeGenerator(idForm) }
     </div>
   );
 }

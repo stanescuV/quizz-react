@@ -1,14 +1,7 @@
 import { Formular } from "../entities/form";
 
-const testEverything = (formular: Formular, formName: string) => {
-    if( testIfNameEmpty(formName) && testSelectedOption(formular)&& testIfOptionEmpty(formular)&& testIfQuestionEmpty(formular)) {
-        console.log("tests passed ! ");
-        return true;
-    }
-    
-    return false;
-   
-}
+
+
 
 //test if there is a question with no selected option
 const testSelectedOption = (formular: Formular) => {
@@ -47,9 +40,23 @@ const testIfNameEmpty = (formName: string) => {
     };
 
     return false; 
-
 }
 
+
+const tests = [testSelectedOption, testIfOptionEmpty, testIfQuestionEmpty];
+
+const testEverything = (formular: Formular) => {
+    return tests.every((test)=>{
+        if(!test(formular)) {
+            console.log(`${test.name} did not work!` );
+            return false;
+        }
+        
+        return true;
+    })
+    
+   
+}
 
 
 
