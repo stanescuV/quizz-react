@@ -213,7 +213,7 @@ function Form() {
       const dbForm = convertFormularToFormEntity(formular, formName, uid);
 
       // www.quizzReact.com/form/?id 
-      setIdForm((await addFormDb(dbForm)) as string);  // Save form data to the database
+      setIdForm(`localhost:3000/${(await addFormDb(dbForm)) as string}`);  // Save form data to the database
 
       console.log("Form submitted:", dbForm);
     } else {
