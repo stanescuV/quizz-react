@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import type { FormEntity, QuestionDB, OptionDB } from '../entities/formDB';
 import { useAuth} from '../firebase/authContext';
 import { Formular } from '../entities/form';
-import { addFormDb } from '../firebase/firestore';
+import { addFormDb, readData} from '../firebase/firestore';
 import { testEverything } from '../tests/testForm';
 import QRCodeGenerator from './QRCode';
 
@@ -291,6 +291,7 @@ function Form() {
         <div>{renderFormular(formular)}</div>
         <button type="button" onClick={addQuestion}>add form</button>
         <button type="button" onClick={reinitializeForm}> Reinitialize Form</button>
+        <button type="button" onClick={() => readData()}> TEST</button>
         <input 
             type="text"
             value={questionToDelete} 

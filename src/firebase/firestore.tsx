@@ -1,6 +1,8 @@
-import { addDoc, collection } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs} from 'firebase/firestore';
+
 import { db } from "./firebase";
 import { FormEntity } from "../entities/formDB";
+
 
 //CRUD METHODS 
 
@@ -20,6 +22,14 @@ const addFormDb = async (form: FormEntity) => {
   }
 
 // add a method to see the forms added
+const readData = async () => { 
+    
+  const q = query(collection(db, "forms"));
 
-
-export {addFormDb};
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id, " => ", doc.data());
+  });
+}
+export {addFormDb, readData};

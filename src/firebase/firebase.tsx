@@ -43,6 +43,6 @@ async function signIn(email: string, password:string) {
 }
 
 // Export Firebase utilities
-export { auth, createUser, signIn, db, addDoc, setDoc, collection, doc };
+export { auth, createUser, signIn, db, app};
 export default app;
 
