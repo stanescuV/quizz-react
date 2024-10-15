@@ -2,6 +2,8 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "./firebase";
 import { FormEntity } from "../entities/formDB";
 
+//CRUD METHODS 
+
 
 // use this to insert a form in the DB
 const addFormDb = async (form: FormEntity) => {
@@ -16,6 +18,8 @@ const addFormDb = async (form: FormEntity) => {
       console.log(err)
     }
   }
+
+// add a method to see the forms added
 
 
 export {addFormDb};

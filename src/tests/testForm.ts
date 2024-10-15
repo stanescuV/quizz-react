@@ -52,6 +52,7 @@ const testEverything = (formular: Formular) => {
             return false;
         }
         
+        
         return true;
     })
     
