@@ -1,4 +1,4 @@
-import { collection, addDoc, query, where, getDocs} from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, doc, deleteDoc} from 'firebase/firestore';
 
 import { db } from "./firebase";
 import { FormEntity } from "../entities/formDB";
@@ -32,4 +32,10 @@ const readData = async () => {
     console.log(doc.id, " => ", doc.data());
   });
 }
-export {addFormDb, readData};
+
+//delete
+const deleteData = async (id: string) => {
+  await deleteDoc(doc(db, "forms", `${id}`));
+  console.log("data has been deleted ")
+}
+export {addFormDb, readData, deleteData};
