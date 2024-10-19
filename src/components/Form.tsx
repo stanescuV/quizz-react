@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import type { FormEntity, QuestionDB, OptionDB } from '../entities/formDB';
+import { convertFormularToFormEntity } from '../entities/convertEntities';
 import { useAuth} from '../firebase/authContext';
 import { Formular } from '../entities/form';
 import { addFormDb, findAllForms, findFormsWithHostId } from '../firebase/firestore';
@@ -46,26 +46,8 @@ function Form() {
 
   
   // n2 // de modificat sa fie mai clara
-  //this converts the formular from the frontend entity into the DB entity
-  function convertFormularToFormEntity(formular: Formular, name: string, host: string): FormEntity {
-    const questions: QuestionDB[] = Object.values(formular).map((q) => {
-        const options: OptionDB[] = Object.keys(q.options).map((key) => ({
-          isSelected: key === q.selectedOption,
-          [key]: q.options[key], // You can choose to set option1 or option2 dynamically here
-        }));
 
-        return {
-          question: q.question,
-          options: options,
-        };
-    });
 
-    return {
-      host,
-      name,
-      questions,
-    };
-} 
   //modify the formular state
   const setTextQuestion = (formularKey: keyof Formular, text: string) => {
     setFormular(prevFormular => ({
