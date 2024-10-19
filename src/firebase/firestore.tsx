@@ -1,4 +1,4 @@
-import { collection, addDoc, query, getDocs, doc, deleteDoc, where} from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, doc, deleteDoc, where, updateDoc} from 'firebase/firestore';
 
 import { db } from "./firebase";
 import { FormEntity } from "../entities/formDB";
@@ -45,9 +45,16 @@ const findFormsWithHostId = async (id: string) => {
   });
 }
 
+//update 
+const updateFormularName = async (idForm: string, newName: string) => {
+  const formRef = doc(db, 'forms', idForm);
+
+  await updateDoc(formRef, {name: newName});
+}
+
 //delete
 const deleteData = async (id: string) => {
   await deleteDoc(doc(db, "forms", `${id}`));
   console.log("data has been deleted ")
 }
-export {addFormDb, findAllForms, deleteData, findFormsWithHostId};
+export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName};
