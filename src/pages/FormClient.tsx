@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import  Form  from "../components/Form";
 import { convertFormEntityToFormular } from "../entities/convertEntities";
 import { FormEntity } from "../entities/formDB";
 import { readFormularWithId } from "../firebase/firestore";
 import { useEffect, useState } from 'react';
 import { Formular } from "../entities/form";
+import { renderFormular } from "../renderLogic/renderForm";
 
 function FormClient() {
   // Get the id from the URL using useParams
@@ -15,6 +15,13 @@ function FormClient() {
   const [formFrontend, setFormFrontend] = useState<Formular | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<{ [key: string]: string }>({});
+  const chooseRightAnswer = (e: React.ChangeEvent<HTMLInputElement>, questionKey: string) => {
+    setSelectedOption({
+      ...selectedOption,
+      [questionKey]: e.target.id,
+    });
+  };
 
   useEffect(() => {
     const fetchForm = async () => {
@@ -58,7 +65,7 @@ function FormClient() {
   // Once the form data is fetched and ready, render the Form component
   return formFrontend ? (
     <div>
-      <Form document={formFrontend} />
+      {renderFormular(formFrontend, chooseRightAnswer, selectedOption)}
     </div>
   ) : null;
 }
