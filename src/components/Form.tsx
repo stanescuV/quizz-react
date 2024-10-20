@@ -52,9 +52,6 @@ function Form({ document }: { document: Formular }) {
   const [idForm, setIdForm] = useState("");
 
   
-  // n2 // de modificat sa fie mai clara
-
-
   //modify the formular state
   const setTextQuestion = (formularKey: keyof Formular, text: string) => {
     setFormular(prevFormular => ({
@@ -269,7 +266,6 @@ function Form({ document }: { document: Formular }) {
     return questionsOfForm.map((key)=>renderQuestion(key))
   }
 
-  // de facut functie de verificat formular pentru submit
   return (
     <div>
       <label style={{marginRight:"10px"}}>Form Name</label>
