@@ -23,6 +23,7 @@ function convertFormularToFormEntity(formular: Formular, name: string, host: str
 } 
 
 function convertFormEntityToFormular(form: FormEntity): Formular {
+    console.log(form);
     const questions = Object.values(form.questions);
 
     const formular: Formular = {};

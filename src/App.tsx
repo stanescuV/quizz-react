@@ -4,6 +4,7 @@ import SignIn from './pages/SignIn';
 import Login from './pages/LogIn';
 import { AuthProvider } from './firebase/authContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import FormClient from './pages/FormClient';
 
 
 const App: React.FC = () => {
@@ -15,6 +16,7 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/signIn" element={<SignIn />} />
             <Route path="/logIn" element={<Login />} />
+            <Route path="/form/:id?" element={<FormClient  />} />
           </Routes>
         </div>
       </Router>

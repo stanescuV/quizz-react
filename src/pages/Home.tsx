@@ -5,7 +5,7 @@ interface Props {}
 export default function Home({}: Props) {
   return (
     <div>
-        <Form />
+        <Form document={{}} />
     </div>
   )
 }

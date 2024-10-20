@@ -2,13 +2,20 @@ import React, {useState} from 'react';
 import { convertFormularToFormEntity } from '../entities/convertEntities';
 import { useAuth} from '../firebase/authContext';
 import { Formular } from '../entities/form';
-import { addFormDb, findAllForms, findFormsWithHostId, updateFormularName } from '../firebase/firestore';
+import { addFormDb, findAllForms, findFormsWithHostId, updateFormularName, readFormularWithId } from '../firebase/firestore';
 import { testEverything } from '../tests/testForm';
 import QRCodeGenerator from './QRCode';
+import { useNavigate } from 'react-router-dom';
 
-function Form() {
+function Form({ document }: { document: Formular }) {
+  
+  
   //User
   const {currentUser} = useAuth();
+  
+  //react router
+  const navigate = useNavigate();
+
 
   //Default input 
   const defaultInput = {
@@ -195,7 +202,8 @@ function Form() {
       const dbForm = convertFormularToFormEntity(formular, formName, uid);
 
       // www.quizzReact.com/form/?id 
-      setIdForm(`localhost:3000/${(await addFormDb(dbForm)) as string}`);  // Save form data to the database
+      const urlForm = `/form/${(await addFormDb(dbForm)) as string}`  // Save form data to the database
+      navigate(urlForm);
 
       console.log("Form submitted:", dbForm);
     } else {
@@ -270,10 +278,11 @@ function Form() {
             onChange={(e) =>setFormName(e.target.value)} 
             placeholder="Math Form, Fun form, quizz..."></input>
       <form onSubmit={handleSubmit}>
-        <div>{renderFormular(formular)}</div>
+        <div>{document && renderFormular(document)} </div>
+        <div>{Object.keys(document).length === 0 && renderFormular(formular)}</div>
         <button type="button" onClick={addQuestion}>add form</button>
         <button type="button" onClick={reinitializeForm}> Reinitialize Form</button>
-        <button type="button" onClick={() => updateFormularName('2CbLOPtqdk2XyFTiOGxc', "matematica pentru fraieri") }> TEST</button>
+        <button type="button" onClick={() => readFormularWithId('CGHYfpmb3KkfoeaYs226') }> TEST</button>
         <input 
             type="text"
             value={questionToDelete} 
@@ -289,5 +298,5 @@ function Form() {
   );
 }
 
-
 export default Form;
+

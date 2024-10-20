@@ -1,4 +1,4 @@
-import { collection, addDoc, query, getDocs, doc, deleteDoc, where, updateDoc} from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, doc, deleteDoc, where, updateDoc, getDoc} from 'firebase/firestore';
 
 import { db } from "./firebase";
 import { FormEntity } from "../entities/formDB";
@@ -9,6 +9,11 @@ import { FormEntity } from "../entities/formDB";
 const formsRef = collection(db, 'forms');
 
 // use this to insert a form in the DB
+/** it inserts in the DB, forms in firestore
+ * 
+ * 
+ * 
+ */
 const addFormDb = async (form: FormEntity) => {
 
     try{
@@ -36,13 +41,21 @@ const findAllForms = async () => {
 //ex : host : YEfwrMFB2JdVran7Ea4z8sgE7642 --> all forms the user wrote 
 const findFormsWithHostId = async (id: string) => { 
   
-  const q = query(formsRef, where('host', "==", `${id}`));
+  const q = query(formsRef, where('host', "==", id));
 
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
     console.log(doc.id, " => ", doc.data());
   });
+}
+
+const readFormularWithId = async (idForm: string) => {
+  const formRef = doc(db, 'forms', idForm);
+  const docSnap = await getDoc(formRef);
+  console.log(docSnap.data());
+  return docSnap.data();
+  
 }
 
 //update 
@@ -57,4 +70,4 @@ const deleteData = async (id: string) => {
   await deleteDoc(doc(db, "forms", `${id}`));
   console.log("data has been deleted ")
 }
-export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName};
+export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName, readFormularWithId};
