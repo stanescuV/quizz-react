@@ -200,7 +200,8 @@ function Form({ document }: { document: Formular }) {
 
       // www.quizzReact.com/form/?id 
       const urlForm = `/form/${(await addFormDb(dbForm)) as string}`  // Save form data to the database
-      navigate(urlForm);
+      setIdForm("http://localhost:5173" + urlForm);
+      // navigate(urlForm);
 
       console.log("Form submitted:", dbForm);
     } else {
@@ -273,7 +274,7 @@ function Form({ document }: { document: Formular }) {
             value={formName} 
             onChange={(e) =>setFormName(e.target.value)} 
             placeholder="Math Form, Fun form, quizz..."></input>
-      <form onSubmit={handleSubmit}>
+      {!idForm && <form onSubmit={handleSubmit}>
         <div>{document && renderFormular(document)} </div>
         <div>{Object.keys(document).length === 0 && renderFormular(formular)}</div>
         <button type="button" onClick={addQuestion}>add form</button>
@@ -287,7 +288,7 @@ function Form({ document }: { document: Formular }) {
             />
         <button type="button" onClick={handleDeleteQuestion}>Delete Question</button>
         <button type="submit" >Submit</button>
-      </form>
+      </form>}
 
       {idForm && QRCodeGenerator(idForm) }
     </div>
