@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { convertFormularToFormEntity } from '../entities/convertEntities';
 import { useAuth} from '../firebase/authContext';
 import { Formular } from '../entities/form';
-import { addFormDb, findAllForms, findFormsWithHostId, updateFormularName, readFormularWithId } from '../firebase/firestore';
+import { addFormDb, readFormularWithId } from '../firebase/firestore';
 import { testEverything } from '../tests/testForm';
 import QRCodeGenerator from './QRCode';
 import { useNavigate } from 'react-router-dom';

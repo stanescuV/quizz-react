@@ -43,6 +43,7 @@ function FormClient() {
       }
     };
 
+    
     // Fetch the form only if an id is provided
     if (idForm) {
       fetchForm();
