@@ -5,7 +5,7 @@ import { Formular } from '../entities/form';
 import { addFormDb, readFormularWithId } from '../firebase/firestore';
 import { testEverything } from '../tests/testForm';
 import QRCodeGenerator from './QRCode';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 function Form({ document }: { document: Formular }) {
   
@@ -14,7 +14,7 @@ function Form({ document }: { document: Formular }) {
   const {currentUser} = useAuth();
   
   //react router
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
   //Default input 
