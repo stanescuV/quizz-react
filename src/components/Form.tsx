@@ -96,8 +96,8 @@ function Form({ document }: { document: Formular }) {
   const addOption = (formularKey: keyof Formular) => {
     setFormular((prevFormular) => {
       const currentOptions = prevFormular[formularKey].options;
-      const optionCount = Object.keys(currentOptions).length; 
-      const newOptionKey = `option${optionCount + 1}`; 
+      const optionCount = Object.keys(currentOptions).length;
+      const newOptionKey = `option${optionCount + 1}`;
   
       return {
         ...prevFormular,
@@ -105,7 +105,7 @@ function Form({ document }: { document: Formular }) {
           ...prevFormular[formularKey],
           options: {
             ...currentOptions,
-            [newOptionKey]: "",  
+            [newOptionKey]: "", // Add new option with an empty string as a placeholder
           },
         },
       };
@@ -179,11 +179,11 @@ function Form({ document }: { document: Formular }) {
   };
 
   const handleAddOption = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const button = e.target as HTMLButtonElement;  
-    const questionKey = button.id; 
+    const button = e.currentTarget; // Access the current button element
+    const questionKey = button.getAttribute("data-key"); // Retrieve data-key attribute
   
-    if (Object.keys(formular).includes(questionKey)) {
-      addOption(questionKey as keyof Formular);  
+    if (questionKey && Object.keys(formular).includes(questionKey)) {
+      addOption(questionKey as keyof Formular); // Add option for the specific question key
     }
   };
 
@@ -227,37 +227,62 @@ function Form({ document }: { document: Formular }) {
     const lastNumberOfTheQuestionKey = (questionKey as string).substring((questionKey as string).length - 1);
 
     return (
-      <div className="questionContainer" key={questionKey} id={`${questionKey}`}>
-        <label>{`${lastNumberOfTheQuestionKey}. `}Question:</label>
-        <input 
-          type="text"
-          value={questionData.question} 
-          onChange={(e) =>handleQuestionChange(e, questionKey)} 
-          placeholder="Enter your question here" 
-        />
-        <div className={`optionsContainer-${questionKey}`}>
-          {Object.entries(options).map(([key, text]) => (
-            <div key={key}>
-              <input
-                type="text"
-                name={key}
-                placeholder={`${text}`}
-                value={text}
-                onChange={(e) => handleOptionChange(e, questionKey)}
-              />
-              <input 
-                type='radio' 
-                name={`options-${questionKey}`}  
-                id={key} 
-                onChange={(e) => chooseRightAnswer(e, questionKey)}
-                checked={selectedOption === key}
-              />
-            </div>
-            ))}
-        </div>
-        <button type="button" key={`${questionKey} +` } id={`${questionKey}`} onClick={handleAddOption} >+</button>
-        <button type="button" key={`${questionKey} -` } onClick={() => deleteOption(questionKey)} >-</button>
+      <div
+      className="questionContainer p-4 mb-4 border rounded-lg shadow-lg bg-white"
+      key={questionKey}
+      id={`${questionKey}`}
+      >
+      <label className="block text-lg font-semibold mb-2 text-gray-700">
+      {`${lastNumberOfTheQuestionKey}.`} Question:
+      </label>
+      <input
+         type="text"
+         value={questionData.question}
+         onChange={(e) => handleQuestionChange(e, questionKey)}
+      placeholder="Enter your question here"
+      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      />
+      <div className={`optionsContainer-${questionKey} mt-4 space-y-2`}>
+         {Object.entries(options).map(([key, text]) => (
+         <div className="flex items-center space-x-2" key={key}>
+            <input
+               type="text"
+               name={key}
+               placeholder={`${text}`}
+               value={text}
+               onChange={(e) => handleOptionChange(e, questionKey)}
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+            <input
+               type="radio"
+               name={`options-${questionKey}`}
+               id={key}
+               onChange={(e) => chooseRightAnswer(e, questionKey)}
+            checked={selectedOption === key}
+            className="text-blue-600 focus:ring-blue-500"
+            />
+         </div>
+         ))}
       </div>
+      <div className="flex space-x-2 mt-4">
+         <button
+         type="button"
+         id={`${questionKey} +`}
+         data-key={questionKey}
+         onClick={handleAddOption}
+         className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+         >
+         +
+         </button>
+         <button
+            type="button"
+            onClick={() => deleteOption(questionKey)}
+         className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+         >
+         -
+         </button>
+      </div>
+   </div>
     )
 
   }
@@ -268,30 +293,83 @@ function Form({ document }: { document: Formular }) {
   }
 
   return (
-    <div>
-      <label style={{marginRight:"10px"}}>Form Name</label>
-      <input  type="text"
-            value={formName} 
-            onChange={(e) =>setFormName(e.target.value)} 
-            placeholder="Math Form, Fun form, quizz..."></input>
-      {!idForm && <form onSubmit={handleSubmit}>
-        <div>{document && renderFormular(document)} </div>
-        <div>{Object.keys(document).length === 0 && renderFormular(formular)}</div>
-        <button type="button" onClick={addQuestion}>add form</button>
-        <button type="button" onClick={reinitializeForm}> Reinitialize Form</button>
-        <button type="button" onClick={() => readFormularWithId('CGHYfpmb3KkfoeaYs226') }> TEST</button>
-        <input 
+    <div className="p-6 border rounded-lg shadow-lg bg-white space-y-4">
+   {/* Form Name Input */}
+   <div className="flex items-center space-x-3">
+      <label className="text-lg font-semibold text-gray-700">Form Name</label>
+      <input
+         type="text"
+         value={formName}
+         onChange={(e) => setFormName(e.target.value)}
+      placeholder="Math Form, Fun form, quiz..."
+      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      />
+   </div>
+   {/* Conditional Form Display */}
+   {!idForm && (
+   <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Render Form Content */}
+      <div>
+         {document && renderFormular(document)}
+         {Object.keys(document).length === 0 && renderFormular(formular)}
+      </div>
+      {/* Form Action Buttons */}
+      <div className="flex flex-wrap space-x-3">
+         <button
+            type="button"
+            onClick={addQuestion}
+            className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+            >
+         Add Form
+         </button>
+         <button
+            type="button"
+            onClick={reinitializeForm}
+            className="px-4 py-2 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            >
+         Reinitialize Form
+         </button>
+         <button
+            type="button"
+            onClick={() => readFormularWithId('CGHYfpmb3KkfoeaYs226')}
+         className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+         >
+         TEST
+         </button>
+      </div>
+      {/* Delete Question Section */}
+      <div className="flex items-center space-x-3">
+         <input
             type="text"
-            value={questionToDelete} 
-            onChange={(e) =>setQuestionToDelete(e.target.value)} 
-            placeholder="Ex: 1, 2, 4..." 
-            />
-        <button type="button" onClick={handleDeleteQuestion}>Delete Question</button>
-        <button type="submit" >Submit</button>
-      </form>}
-
-      {idForm && QRCodeGenerator(idForm) }
-    </div>
+            value={questionToDelete}
+            onChange={(e) => setQuestionToDelete(e.target.value)}
+         placeholder="Ex: 1, 2, 4..."
+         className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+         />
+         <button
+            type="button"
+            onClick={handleDeleteQuestion}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+         Delete Question
+         </button>
+      </div>
+      {/* Submit Button */}
+      <button
+         type="submit"
+         className="w-full py-2 bg-indigo-500 text-white font-semibold rounded-lg shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+         >
+      Submit
+      </button>
+   </form>
+   )}
+   {/* QR Code Display */}
+   {idForm && (
+   <div className="flex justify-center mt-4">
+      {QRCodeGenerator(idForm)}
+   </div>
+   )}
+</div>
   );
 }
 
