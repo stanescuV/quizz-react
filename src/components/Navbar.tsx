@@ -15,9 +15,13 @@ import { Link } from 'react-router-dom';
 
 
 
+//react router
 
 
-const pages = ['Products', 'Features', 'Pricing'];
+
+
+
+const pages = ['Forms', 'Products', 'Features', 'Pricing'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -45,10 +49,11 @@ function ResponsiveAppBar() {
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
+            
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },

@@ -1,13 +1,14 @@
-import Form from '../components/Form'
 import Navbar from '../components/Navbar'
+import Hero from '../components/Hero'
+type Props = {}
 
-interface Props {}
-
-export default function Home({}: Props) {
+function Home({}: Props) {
   return (
     <div>
-        <Navbar></Navbar>
-        <Form document={{}} />
+        <Navbar/>
+        <Hero/>
     </div>
   )
 }
+
+export default Home
