@@ -6,10 +6,23 @@ import { useEffect, useState } from 'react';
 import { Formular } from "../entities/form";
 import { renderFormular } from "../renderLogic/renderForm";
 
+
+//WS
+let _ws: any; 
+
 function FormClient() {
   // Get the id from the URL using useParams
   const { id } = useParams<{ id: string }>();
   const idForm = id || "";
+
+
+  function sendMessage(message: string, ws: WebSocket) {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(message);
+    } else {
+      console.log('WebSocket connection is not open');
+    }
+  }
 
   // State to manage form data, loading, and errors
   const [formFrontend, setFormFrontend] = useState<Formular | null>(null);
@@ -35,6 +48,7 @@ function FormClient() {
 
         // Update the state with the fetched and converted form
         setFormFrontend(formFrontend);
+
       } catch (err) {
         // Handle errors (e.g., form not found)
         setError('Failed to load the form');
@@ -47,6 +61,9 @@ function FormClient() {
     // Fetch the form only if an id is provided
     if (idForm) {
       fetchForm();
+      _ws = new WebSocket('ws://localhost:3001');
+      console.log(_ws)
+   
     } else {
       setError('Form ID is missing');
       setLoading(false);
@@ -65,9 +82,16 @@ function FormClient() {
 
   // Once the form data is fetched and ready, render the Form component
   return formFrontend ? (
-    <div>
+    <form>
       {renderFormular(formFrontend, chooseRightAnswer, selectedOption)}
-    </div>
+      <button
+        onClick={()=>{sendMessage('Clientul a trimis un mesaj', _ws)}}
+        type="button"
+        className="mt-3 ml-2 p-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+      Submit
+      </button>
+    </form>
   ) : null;
 }
 

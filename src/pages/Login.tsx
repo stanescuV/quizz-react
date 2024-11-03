@@ -4,8 +4,6 @@ interface Props {}
 
 export default function Home({}: Props) {
   return (
-    <div>
         <SignUser />
-    </div>
   )
 }
