@@ -16,9 +16,10 @@ function FormClient() {
   const idForm = id || "";
 
 
-  function sendMessage(message: string, ws: WebSocket) {
+  function sendMessage(message: object, ws: WebSocket) {
     if (ws.readyState === WebSocket.OPEN) {
-      ws.send(message);
+      const dataToSend = JSON.stringify(message);
+      ws.send(dataToSend);
     } else {
       console.log('WebSocket connection is not open');
     }
@@ -85,7 +86,7 @@ function FormClient() {
     <form>
       {renderFormular(formFrontend, chooseRightAnswer, selectedOption)}
       <button
-        onClick={()=>{sendMessage('Clientul a trimis un mesaj', _ws)}}
+        onClick={()=>{sendMessage(formFrontend, _ws)}}
         type="button"
         className="mt-3 ml-2 p-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
