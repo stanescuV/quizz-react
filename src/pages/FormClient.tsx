@@ -43,7 +43,7 @@ function FormClient() {
 
         // Fetch the form from the database // idk how to change this to make it cleaner
         const formFromDb: FormEntity = await readFormularWithId(idForm) as unknown as FormEntity;
-
+        console.log(formFromDb)
         // Convert it to the format needed for the frontend
         const formFrontend = convertFormEntityToFormular(formFromDb);
 
@@ -61,9 +61,10 @@ function FormClient() {
     
     // Fetch the form only if an id is provided
     if (idForm) {
+      
+      console.log(idForm)
       fetchForm();
       _ws = new WebSocket('ws://localhost:3001');
-      console.log(_ws)
    
     } else {
       setError('Form ID is missing');
