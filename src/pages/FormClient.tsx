@@ -16,8 +16,9 @@ function FormClient() {
   const idForm = id || "";
 
 
-  function sendMessage(message: object, ws: WebSocket) {
+  function sendMessage(message: any, ws: WebSocket) {
     if (ws.readyState === WebSocket.OPEN) {
+      message.id = idForm; 
       const dataToSend = JSON.stringify(message);
       ws.send(dataToSend);
     } else {
@@ -46,6 +47,7 @@ function FormClient() {
         console.log(formFromDb)
         // Convert it to the format needed for the frontend
         const formFrontend = convertFormEntityToFormular(formFromDb);
+        
 
         // Update the state with the fetched and converted form
         setFormFrontend(formFrontend);
