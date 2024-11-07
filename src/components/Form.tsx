@@ -246,20 +246,20 @@ function Form({ document }: { document: Formular }) {
          {Object.entries(options).map(([key, text]) => (
          <div className="flex items-center space-x-2" key={key}>
             <input
-               type="text"
-               name={key}
-               placeholder={`${text}`}
-               value={text}
-               onChange={(e) => handleOptionChange(e, questionKey)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              type="text"
+              name={key}
+              placeholder={`${text}`}
+              value={text}
+              onChange={(e) => handleOptionChange(e, questionKey)}
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
             <input
-               type="radio"
-               name={`options-${questionKey}`}
-               id={key}
-               onChange={(e) => chooseRightAnswer(e, questionKey)}
-            checked={selectedOption === key}
-            className="text-blue-600 focus:ring-blue-500"
+              type="radio"
+              name={`options-${questionKey}`}
+              id={key}
+              onChange={(e) => chooseRightAnswer(e, questionKey)}
+              checked={selectedOption === key}
+              className="text-blue-600 focus:ring-blue-500"
             />
          </div>
          ))}
