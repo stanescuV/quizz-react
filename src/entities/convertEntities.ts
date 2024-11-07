@@ -47,7 +47,7 @@ function convertFormEntityToFormular(form: FormEntity): Formular {
         formular[`question${index + 1}`] = {
         question: questionData.question,
         options: optionsForm,
-        selectedOption: selectedOption
+        selectedOption: ""
         };
     });
 

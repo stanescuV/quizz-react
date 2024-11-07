@@ -17,7 +17,7 @@ function FormClient() {
     // Function to render a single question
 
 
-  function sendMessage(e:any, message: any, ws: WebSocket) {
+  function sendMessage( message: any, ws: WebSocket) {
     if (ws.readyState === WebSocket.OPEN) {
       message.id = idForm; 
       const dataToSend = JSON.stringify(message);
@@ -92,10 +92,11 @@ function FormClient() {
 
         // Fetch the form from the database // idk how to change this to make it cleaner
         const formFromDb: FormEntity = await readFormularWithId(idForm) as unknown as FormEntity;
-        console.log(formFromDb)
         // Convert it to the format needed for the frontend
         const formFrontend = convertFormEntityToFormular(formFromDb);
+
         
+        Object.entries(formFrontend)
         // Update the state with the fetched and converted form
         setFormFrontend(formFrontend);
 
@@ -134,10 +135,11 @@ function FormClient() {
 
   // Once the form data is fetched and ready, render the Form component
   return formFrontend ? (
-    <form onSubmit={(e) => sendMessage(e,formFrontend, _ws)}>
+    <form >
       {renderFormular(formFrontend)}
       <button
-        type="submit"
+        onClick={() => sendMessage(formFrontend, _ws)}
+        type="button"
         className="mt-3 ml-2 p-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
       Submit
