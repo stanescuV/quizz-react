@@ -29,7 +29,6 @@ function convertFormEntityToFormular(form: FormEntity): Formular {
 
     questions.forEach((questionData, index) => {
         let optionsForm: { [key: string]: string } = {};
-        let selectedOption = "";
 
         // Iterate over each option to reconstruct the options and identify the selected one
         questionData.options.forEach((option) => {
@@ -37,10 +36,7 @@ function convertFormEntityToFormular(form: FormEntity): Formular {
             const [key, value] = Object.entries(option).find(([k]) => k !== 'isSelected')!;
             optionsForm[key] = value;
 
-            // Check if this option is the selected one
-            if (option.isSelected) {
-                selectedOption = key;
-            }
+            
         }); 
 
         // Rebuild the question object for the frontend structure
