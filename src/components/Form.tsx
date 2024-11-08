@@ -8,7 +8,7 @@ import QRCodeGenerator from './QRCode';
 // import { useNavigate } from 'react-router-dom';
 
 function Form({ document }: { document: Formular }) {
-  
+   
   
   //User
   const {currentUser} = useAuth();
