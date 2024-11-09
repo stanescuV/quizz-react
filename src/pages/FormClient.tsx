@@ -115,8 +115,14 @@ function FormClient() {
       
       console.log(idForm)
       fetchForm();
+      
+      //configure WS
       _ws = new WebSocket('ws://localhost:3001');
-   
+      
+      _ws.onmessage = (event: MessageEvent) => {
+        // Log the received message to the console
+        console.log("Message from server:", event.data);
+    };
     } else {
       setError('Form ID is missing');
       setLoading(false);
