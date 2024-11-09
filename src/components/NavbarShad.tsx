@@ -6,21 +6,25 @@ import {
     NavigationMenuList,
     navigationMenuTriggerStyle,
 } from "./ui/navigation-menu";
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 export default function NavbarShad() {
     const navbarItems = ['Forms', 'Templates', 'Resources', 'Pricing'];
 
+    const navigate = useNavigate();
+
     const renderNavbar = (navbarItems: string[]) => {
         return navbarItems.map((navbarItem, index) => (
             <NavigationMenuItem key={index + navbarItem}>
-                <Link to={'/' + navbarItem}>
                     <NavigationMenuLink 
-                        className={navigationMenuTriggerStyle() + ' text-xl'}
-                        onClick={() => { console.log(`${navbarItem} works !!`) }}
+                        className={navigationMenuTriggerStyle() + ' text-xl cursor-pointer'}
+                        onClick={() => { navigate(navbarItem) }}
                     >
                         {navbarItem}
                     </NavigationMenuLink>
-                </Link>
             </NavigationMenuItem>
         ));
     };
@@ -29,12 +33,13 @@ export default function NavbarShad() {
         <div className="flex items-center justify-between px-5">
         <div className="text-lg font-bold">LOGO</div>
     
-        <NavigationMenu className="flex-grow">
+        <NavigationMenu className="flex-grow"> 
             <NavigationMenuList className="flex justify-center space-x-6">
                 {renderNavbar(navbarItems)}
             </NavigationMenuList>
         </NavigationMenu>
     
+        {/* Right-aligned avatar */}
         <div className="mr-5">AVATAR</div>
     </div>
     
