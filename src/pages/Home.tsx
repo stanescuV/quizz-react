@@ -1,14 +1,12 @@
-import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
-import { Button } from '../components/ui/button'
+import NavbarShad from '../components/NavbarShad'
 type Props = {}
 
 function Home({}: Props) {
   return (
-    <div>
-        <Navbar/>
+    <div className=''>
+        <NavbarShad/>
         <Hero/>
-        <Button className='ml-10'> Hello world </Button>
        
     </div>
   )
