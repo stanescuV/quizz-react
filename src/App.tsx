@@ -6,6 +6,7 @@ import { AuthProvider } from './firebase/authContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import FormClient from './pages/FormClient';
 import Forms from './pages/Forms';
+import HostPage from './pages/HostPage'
 
 
 const App: React.FC = () => {
@@ -19,6 +20,7 @@ const App: React.FC = () => {
             <Route path="/signIn" element={<SignIn />} />
             <Route path="/logIn" element={<Login />} />
             <Route path="/form/:id?" element={<FormClient  />} />
+            <Route path="/host/:hostId?/:formId?" element={<HostPage  />} />
           </Routes>
         </div>
       </Router>
