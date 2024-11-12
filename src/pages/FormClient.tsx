@@ -14,8 +14,8 @@ function FormClient() {
   const { id } = useParams<{ id: string }>();
   const idForm = id || "";
 
-    // Function to render a single question
 
+// WS functions 
 
   function sendMessage( message: any, ws: WebSocket) {
     if (ws.readyState === WebSocket.OPEN) {
@@ -121,6 +121,7 @@ function FormClient() {
       
       _ws.onmessage = (event: MessageEvent) => {
         // Log the received message to the console
+        setDataWS(event.data)
         console.log("Message from server:", event.data);
     };
     } else {
