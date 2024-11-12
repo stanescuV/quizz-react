@@ -121,7 +121,6 @@ function FormClient() {
       
       _ws.onmessage = (event: MessageEvent) => {
         // Log the received message to the console
-        setDataWS(event.data)
         console.log("Message from server:", event.data);
     };
     } else {
