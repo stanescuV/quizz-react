@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { convertFormularToFormEntity } from '../entities/convertEntities';
 import { useAuth} from '../firebase/authContext';
 import { Formular } from '../entities/form';
-import { addFormDb, readFormularWithId } from '../firebase/firestore';
+import { addFormDb } from '../firebase/firestore';
 import { testEverything } from '../tests/testForm';
 import QRCodeGenerator from './QRCode';
 // import { useNavigate } from 'react-router-dom';
@@ -227,61 +227,61 @@ function Form({ document }: { document: Formular }) {
     const lastNumberOfTheQuestionKey = (questionKey as string).substring((questionKey as string).length - 1);
 
     return (
-      <div
+    <div
       className="questionContainer p-4 mb-4 border rounded-lg shadow-lg bg-white"
       key={questionKey}
       id={`${questionKey}`}
       >
-      <label className="block text-lg font-semibold mb-2 text-gray-700">
-      {`${lastNumberOfTheQuestionKey}.`} Question:
-      </label>
-      <input
-         type="text"
-         value={questionData.question}
-         onChange={(e) => handleQuestionChange(e, questionKey)}
-      placeholder="Enter your question here"
-      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      />
-      <div className={`optionsContainer-${questionKey} mt-4 space-y-2`}>
-         {Object.entries(options).map(([key, text]) => (
-         <div className="flex items-center space-x-2" key={key}>
-            <input
-              type="text"
-              name={key}
-              placeholder={`${text}`}
-              value={text}
-              onChange={(e) => handleOptionChange(e, questionKey)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-            <input
-              type="radio"
-              name={`options-${questionKey}`}
-              id={key}
-              onChange={(e) => chooseRightAnswer(e, questionKey)}
-              checked={selectedOption === key}
-              className="text-blue-600 focus:ring-blue-500"
-            />
-         </div>
-         ))}
-      </div>
-      <div className="flex space-x-2 mt-4">
-         <button
-         type="button"
-         id={`${questionKey} +`}
-         data-key={questionKey}
-         onClick={handleAddOption}
-         className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
-         >
-         +
-         </button>
-         <button
-            type="button"
-            onClick={() => deleteOption(questionKey)}
-         className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-         >
-         -
-         </button>
-      </div>
+        <label className="block text-lg font-semibold mb-2 text-gray-700">
+        {`${lastNumberOfTheQuestionKey}.`} Question:
+        </label>
+        <input
+          type="text"
+          value={questionData.question}
+          onChange={(e) => handleQuestionChange(e, questionKey)}
+        placeholder="Enter your question here"
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        />
+        <div className={`optionsContainer-${questionKey} mt-4 space-y-2`}>
+          {Object.entries(options).map(([key, text]) => (
+          <div className="flex items-center space-x-2" key={key}>
+              <input
+                type="text"
+                name={key}
+                placeholder={`${text}`}
+                value={text}
+                onChange={(e) => handleOptionChange(e, questionKey)}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+              <input
+                type="radio"
+                name={`options-${questionKey}`}
+                id={key}
+                onChange={(e) => chooseRightAnswer(e, questionKey)}
+                checked={selectedOption === key}
+                className="text-blue-600 focus:ring-blue-500"
+              />
+          </div>
+          ))}
+        </div>
+        <div className="flex space-x-2 mt-4">
+          <button
+          type="button"
+          id={`${questionKey} +`}
+          data-key={questionKey}
+          onClick={handleAddOption}
+          className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+          +
+          </button>
+          <button
+              type="button"
+              onClick={() => deleteOption(questionKey)}
+          className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+          -
+          </button>
+        </div>
    </div>
     )
 
@@ -331,7 +331,7 @@ function Form({ document }: { document: Formular }) {
          </button>
          <button
             type="button"
-            onClick={() => readFormularWithId('CGHYfpmb3KkfoeaYs226')}
+           
          className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
          >
          TEST

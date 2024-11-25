@@ -1,25 +1,25 @@
 import { useParams } from "react-router-dom";
 import { convertFormEntityToFormular } from "../entities/convertEntities";
 import { FormEntity } from "../entities/formDB";
-import { readFormularWithId } from "../firebase/firestore";
+import {  readFormularWithSessionId } from "../firebase/firestore";
 import { useEffect, useState } from 'react';
 import { Formular } from "../entities/form";
 
 
 //WS
-let _ws: any; 
+let _ws: any;   
 
 function FormClient() {
   // Get the id from the URL using useParams
   const { id } = useParams<{ id: string }>();
-  const idForm = id || "";
+  const idSession = id || "";
 
 
 // WS functions 
 
   function sendMessage( message: any, ws: WebSocket) {
     if (ws.readyState === WebSocket.OPEN) {
-      message.id = idForm; 
+      message.id = idSession; 
       const dataToSend = JSON.stringify(message);
       ws.send(dataToSend);
     } else {
@@ -91,7 +91,7 @@ function FormClient() {
       try {
 
         // Fetch the form from the database // idk how to change this to make it cleaner
-        const formFromDb: FormEntity = await readFormularWithId(idForm) as unknown as FormEntity;
+        const formFromDb: FormEntity = await readFormularWithSessionId(idSession) as unknown as FormEntity;
         // Convert it to the format needed for the frontend
         const formFrontend = convertFormEntityToFormular(formFromDb);
 
@@ -111,9 +111,9 @@ function FormClient() {
 
     
     // Fetch the form only if an id is provided
-    if (idForm) {
+    if (idSession) {
       
-      console.log(idForm)
+      console.log(idSession)
       fetchForm();
       
       //configure WS
@@ -127,7 +127,7 @@ function FormClient() {
       setError('Form ID is missing');
       setLoading(false);
     }
-  }, [idForm]);
+  }, [idSession]);
 
   // Display a loading state while fetching data
   if (loading) {

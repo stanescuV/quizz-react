@@ -25,7 +25,7 @@ const formEntity: FormEntity = {
     questions: [
         { question: "", options: [{ isSelected: false, option1: "" }] },
         { question: "", options: [{ isSelected: true, option2: "" }] }
-    ]
+    ],
 };
 
 export type { FormEntity, QuestionDB, OptionDB }; // Export the type
