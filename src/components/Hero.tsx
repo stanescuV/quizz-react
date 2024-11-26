@@ -17,7 +17,7 @@ function Hero({}: Props) {
           <span className="block">that engage meetings and classrooms.</span> 
         </p>
       </div>
-      <button onClick={()=>{navigate('/forms')}} className="mt-6 p-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">Get Started</button>
+      <button onClick={()=>{navigate('/forms')}} className="mt-6 p-3 bg-[#6e4fff] shadow-lg hover:shadow-xl active:shadow-md hover:bg-[#5a3ed7] active:bg-[#4a34b1] text-white font-semibold rounded-lg shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">Get Started</button>
       <p className='text-slate-500 mt-3'>For free</p>
   </div>
   

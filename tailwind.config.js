@@ -8,6 +8,7 @@ export default {
   theme: {
   	extend: {
   		fontFamily: {
+			pops: ['Poppins', 'bold'],
   			sans: ['Roboto', 'sans-serif'],
   			comic: ['Comic Sans MS"', 'cursive'],
   			times: ['Times New Roman"', 'serif'],
