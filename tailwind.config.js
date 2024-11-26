@@ -7,8 +7,22 @@ export default {
   ],
   theme: {
   	extend: {
+		keyframes: {
+			rise: {
+			  '0%': { transform: 'translateY(100%)', opacity: '0' },
+			  '100%': { transform: 'translateY(0)', opacity: '1' },
+			},
+			float: {
+				'0%, 100%': { transform: 'translateY(0)' },
+				'50%': { transform: 'translateY(-10px)' },
+			  },
+		  },
+		  animation: {
+			rise: 'rise 1s ease-out',
+			float: 'float 3s ease-in-out infinite',
+		  },
   		fontFamily: {
-			pops: ['Poppins', 'bold'],
+			pops: ['Poppins', 'sans-serif'],
   			sans: ['Roboto', 'sans-serif'],
   			comic: ['Comic Sans MS"', 'cursive'],
   			times: ['Times New Roman"', 'serif'],

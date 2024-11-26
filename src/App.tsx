@@ -11,6 +11,7 @@ import HostPage from './pages/HostPage'
 
 const App: React.FC = () => {
   return (
+  
     <AuthProvider>
       <Router>
         <div>
