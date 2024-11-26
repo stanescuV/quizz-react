@@ -25,7 +25,7 @@ const addFormDb = async (form: FormEntity) => {
       
       const session: Session = { 
         idForm: insertedForm.id, 
-        date: (new Date).toString(),
+        date: (new Date).toISOString(),
         answers: []
       }
 
