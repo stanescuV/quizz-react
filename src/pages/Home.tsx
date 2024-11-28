@@ -1,6 +1,7 @@
 import Hero from '../components/Hero'
 import NavbarShad from '../components/NavbarShad'
 import MiddleSection from '../components/MiddleSection'
+import CarouselFront from '../components/CarouselFront'
 type Props = {}
 
 function Home({}: Props) {
@@ -9,7 +10,8 @@ function Home({}: Props) {
         <NavbarShad/>
         <Hero/>
         <MiddleSection/>
-        <div className='bg-white'>HELLO WORLD</div>
+        <CarouselFront />
+        <div>Hello world</div>  
        
     </div>
   )
