@@ -15,8 +15,8 @@ function Hero({}: Props) {
 
   return (
     <div className="select-none mt-10 w-full flex flex-col justify-center items-center border border-[#6e4fff]  bg-[#6e4fff] min-w-full">
-      <div className="pb-5 text-5xl font-bold mb-6 font-pops text-white tracking-wide relative">
-        <span className="bg-white text-[#6e4fff] rounded-lg">Play</span> until you are the <span className="relative">
+      <div className="pb-5 text-5xl font-bold mb-6 font-pops text-white tracking-wide relative ">
+        <span className="bg-white text-[#6e4fff] rounded-lg ">Play</span> until you are the <span className="relative">
           best
           <img
             src={Line}

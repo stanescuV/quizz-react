@@ -8,27 +8,29 @@ export default {
   theme: {
   	extend: {
 		keyframes: {
-			rotateLeft:{
-				'0%': { transform: 'rotate(0deg)' },       // Start at the original position
-				'50%': { transform: 'rotate(-10deg)' },    // Rotate 10% to the left (counterclockwise)
-				'100%': { transform: 'rotate(0deg)' },     // End back at the original position
+			rotateLeft: {
+			  '0%': { transform: 'rotate(0deg)' },
+			  '50%': { transform: 'rotate(-10deg)' },
+			  '100%': { transform: 'rotate(0deg)' },
 			},
-
+		  
 			rise: {
 			  '0%': { transform: 'translateY(100%)', opacity: '0' },
 			  '100%': { transform: 'translateY(0)', opacity: '1' },
 			},
-
+		  
 			float: {
-				'0%, 100%': { transform: 'translateY(0)' },
-				'50%': { transform: 'translateY(-10px)' },
-			  },
+			  '0%, 100%': { transform: 'translateY(0)' },
+			  '50%': { transform: 'translateY(-10px)' },
+			},
 		  },
+		  
 		  animation: {
 			rotateLeft: 'rotateLeft 2s ease-in-out infinite',
 			rise: 'rise 1s ease-out',
 			float: 'float 3s ease-in-out infinite',
 		  },
+		  
   		fontFamily: {
 			pops: ['Poppins', 'sans-serif'],
 			inter: ['Inter', 'sans-serif'],
