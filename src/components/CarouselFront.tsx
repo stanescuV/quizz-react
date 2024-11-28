@@ -8,16 +8,16 @@ import { Card, CardContent } from "./ui/card"
 
 function CarouselFront() {
   return (
-    <div className="flex">
+    <div className="flex ">
       <Carousel
         opts={{
           align: "start",
         }}
-        className="w-full bg-white pl-10"
+        className="w-full bg-white pl-10 pt-10"
       >
         <CarouselContent >
           {Array.from({ length: 5 }).map((_, index) => { 
-            const colors = ['#3E63DD', '#664282', '#E54666',  '#E54D2E', '#30A46C'];
+            const colors = ['#3E63DD', '#664282', '#E54666','#664282',  '#3E63DD'];
             const color = colors[index];
             const places = ['Education', 'Training', 'Feedback', 'Entertainement', 'Engagement']
 
