@@ -26,10 +26,10 @@ export default function NavbarShad() {
     };
 
     return (
-        <div className="flex w-full px-5 py-4 bg-white ">
+        <div className="flex w-full px-5 py-4 bg-white items-center">
             {/* Logo on the left */}
-            <div className="w-1/3 ">
-                <img src={VicSvg} alt="VicSvg" className="w-10 h-10"/>
+            <div  className="w-1/3 ">
+                <img src={VicSvg} alt="VicSvg" onClick={() => navigate('/')} className="w-10 h-10 cursor-pointer fill-current"/>
             </div>
     
             {/* Navbar items in the center */}

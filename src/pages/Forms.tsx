@@ -1,12 +1,12 @@
 import Form from '../components/Form'
-import Navbar from '../components/Navbar'
+import NavbarShad from '../components/NavbarShad'
 
 interface Props {}
 
 export default function Forms({}: Props) {
   return (
     <div>
-        <Navbar></Navbar>
+        <NavbarShad/>
         <Form document={{}} />
     </div>
   )
