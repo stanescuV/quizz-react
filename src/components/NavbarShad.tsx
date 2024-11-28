@@ -16,7 +16,7 @@ export default function NavbarShad() {
         return navbarItems.map((navbarItem, index) => (
             <NavigationMenuItem key={index + navbarItem}>
                 <NavigationMenuLink 
-                    className={navigationMenuTriggerStyle() + ' text-xl cursor-pointer font-pops font-black'}
+                    className={navigationMenuTriggerStyle() + ' text-xl cursor-pointer font-pops font-extrabold '}
                     onClick={() => { navigate(navbarItem) }}
                 >
                     {navbarItem}
@@ -26,21 +26,21 @@ export default function NavbarShad() {
     };
 
     return (
-        <div className="flex justify-between px-5 pt-4 ">
+        <div className="flex w-full px-5 py-4 bg-white ">
             {/* Logo on the left */}
-            <div>
-                <img src={VicSvg} alt="VicSvg" className="w-10 h-10 min-w-10 min-h-10"/>
+            <div className="w-1/3 ">
+                <img src={VicSvg} alt="VicSvg" className="w-10 h-10"/>
             </div>
     
             {/* Navbar items in the center */}
-            <NavigationMenu className="flex-grow"> 
+            <NavigationMenu className="w-1/3 flex-grow items-center justify-center"> 
                 <NavigationMenuList className="flex space-x-6">
                     {renderNavbar(navbarItems)}
                 </NavigationMenuList>
             </NavigationMenu>
     
             {/* Signup and Login buttons on the right */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-end justify-end gap-2 w-1/3 ">
                 <button className="w-32 h-8 bg-[#6e4fff] rounded-[30px] text-white text-l font-bold font-['Poppins'] shadow-lg hover:shadow-xl active:shadow-md hover:bg-[#5a3ed7] active:bg-[#4a34b1]">
                     Signup Free
                 </button>

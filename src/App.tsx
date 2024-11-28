@@ -12,9 +12,9 @@ import HostPage from './pages/HostPage'
 const App: React.FC = () => {
   return (
   
+  <div className='bg-[#6e4fff]'>
     <AuthProvider>
       <Router>
-        <div>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/forms" element={<Forms />} />
@@ -23,9 +23,9 @@ const App: React.FC = () => {
             <Route path="/form/:id?" element={<FormClient  />} />
             <Route path="/host/:hostId?/:formId?" element={<HostPage  />} />
           </Routes>
-        </div>
       </Router>
     </AuthProvider>
+  </div>
   );
 };
 

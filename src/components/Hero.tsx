@@ -14,8 +14,8 @@ function Hero({}: Props) {
   // const navigate = useNavigate();
 
   return (
-    <div className="container mt-2 w-full flex flex-col justify-center items-center border bg-[#6e4fff] pt-10 min-w-full">
-      <div className="text-5xl font-bold mb-6 font-pops text-white tracking-wide relative">
+    <div className="select-none mt-10 w-full flex flex-col justify-center items-center border border-[#6e4fff]  bg-[#6e4fff] min-w-full">
+      <div className="pb-5 text-5xl font-bold mb-6 font-pops text-white tracking-wide relative">
         <span className="bg-white text-[#6e4fff] rounded-lg">Play</span> until you are the <span className="relative">
           best
           <img
@@ -29,20 +29,20 @@ function Hero({}: Props) {
       <div className="flex items-end ">
       {/* Col1 */}
       <div className="flex flex-col items-center animate-rise delay-100">
-        <img src={Avatar1} alt="VicSvg" className="w-10 h-10 min-w-10 min-h-10 animate-float" />
-        <img src={Col1} alt="2nd Place" className="w-40 h-32" /> {/* Medium height */}
+        <img src={Avatar1} alt="VicSvg" className="w-20 h-20 min-w-10 min-h-10 animate-float" />
+        <img src={Col1} alt="2nd Place" className="w-72 h-56" /> {/* Medium height */}
       </div>
 
       {/* Col2 */}
       <div className="flex flex-col items-center animate-rise delay-200">
-        <img src={Avatar2} alt="VicSvg" className="w-10 h-10 min-w-10 min-h-10 animate-float " />
-        <img src={Col2} alt="1st Place" className="w-40 h-40" /> {/* Tallest */}
+        <img src={Avatar2} alt="VicSvg" className="w-20 h-20 min-w-10 min-h-10 animate-float " />
+        <img src={Col2} alt="1st Place" className="w-72 h-72" /> {/* Tallest */}
       </div>
 
       {/* Col3 */}
       <div className="flex flex-col items-center animate-rise delay-300">
-        <img src={Avatar3} alt="VicSvg" className="w-10 h-10 min-w-10 min-h-10 animate-float" />
-        <img src={Col3} alt="3rd Place" className="w-40 h-28" /> {/* Shortest */}
+        <img src={Avatar3} alt="VicSvg" className="w-20 h-20 min-w-10 min-h-10 animate-float" />
+        <img src={Col3} alt="3rd Place" className="w-72 h-48" /> {/* Shortest */}
       </div>
      </div>
 

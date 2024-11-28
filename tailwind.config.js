@@ -23,6 +23,7 @@ export default {
 		  },
   		fontFamily: {
 			pops: ['Poppins', 'sans-serif'],
+			inter: ['Inter', 'sans-serif'],
   			sans: ['Roboto', 'sans-serif'],
   			comic: ['Comic Sans MS"', 'cursive'],
   			times: ['Times New Roman"', 'serif'],
