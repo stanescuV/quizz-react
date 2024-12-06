@@ -1,23 +1,24 @@
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import AnswersChart from '../components/AnswersChart';
 
 const HostPage = () => {
     // Destructure both parameters from useParams
-    const { hostId, formId } = useParams<{ hostId: string; formId: string }>();
+    const { hostId, sessionId } = useParams<{ hostId: string; sessionId: string }>();
 
     // Ref to hold the WebSocket instance
     const wsRef = useRef<WebSocket | null>(null);
 
     useEffect(() => {
         // Only connect if both ids are provided
-        if (formId && hostId) {
+        if (sessionId && hostId) {
             wsRef.current = new WebSocket('ws://localhost:3001');
 
             wsRef.current.onopen = () => {
                 const adminObject = {
                     adminMessage: 'Admin has connected',
                     adminId: hostId,
-                    adminForm: formId
+                    adminSession: sessionId
                 };
 
                 const dataToSend = JSON.stringify(adminObject);
@@ -25,6 +26,7 @@ const HostPage = () => {
             };
 
             wsRef.current.onmessage = (event) => {
+                //TODO: USE STATE THE CLIENTS ANSWERS 
                 console.log("Message from server:", event.data);
             };
         }
@@ -36,13 +38,14 @@ const HostPage = () => {
                 console.log("WebSocket connection closed");
             }
         };
-    }, [formId, hostId]);
+    }, [sessionId, hostId]);
 
     return (
         <div>
             <h1>Host Page</h1>
             <p>Host ID: {hostId}</p>
-            <p>Form ID: {formId}</p>
+            <p>Session ID: {sessionId}</p>
+            <AnswersChart/>
         </div>
     );
 };

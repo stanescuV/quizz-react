@@ -23,6 +23,7 @@ function FormClient() {
       const dataToSend = JSON.stringify(message);
       ws.send(dataToSend);
     } else {
+      //TODO: SEND AN ERROR TO CLIENT
       console.log('WebSocket connection is not open');
     }
 

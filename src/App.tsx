@@ -20,8 +20,8 @@ const App: React.FC = () => {
             <Route path="/forms" element={<Forms />} />
             <Route path="/signIn" element={<SignIn />} />
             <Route path="/logIn" element={<Login />} />
-            <Route path="/form/:id?" element={<FormClient  />} />
-            <Route path="/host/:hostId?/:formId?" element={<HostPage  />} />
+            <Route path="/session/:id?" element={<FormClient  />} />
+            <Route path="/host/:hostId?/:sessionId?" element={<HostPage  />} />
           </Routes>
       </Router>
     </AuthProvider>
