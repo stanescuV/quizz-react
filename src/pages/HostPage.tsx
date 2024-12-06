@@ -1,11 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import AnswersChart from '../components/AnswersChart';
+import {AnswersChart} from '../components/AnswersChart';
 
 const HostPage = () => {
     // Destructure both parameters from useParams
     const { hostId, sessionId } = useParams<{ hostId: string; sessionId: string }>();
 
+    const answerData = [
+        { "question1": { "question": "Combien font 2 + 2 ?", "isCorrect": true, "selectedOption": "option4" } },
+        { "question1": { "question": "Combien font 2 + 2 ?", "isCorrect": false, "selectedOption": "option2" } },
+        { "question2": { "question": "Capital of France?", "isCorrect": true, "selectedOption": "option1" } }
+      ];
     // Ref to hold the WebSocket instance
     const wsRef = useRef<WebSocket | null>(null);
 
@@ -40,12 +45,14 @@ const HostPage = () => {
         };
     }, [sessionId, hostId]);
 
+    
+
     return (
         <div>
             <h1>Host Page</h1>
             <p>Host ID: {hostId}</p>
             <p>Session ID: {sessionId}</p>
-            <AnswersChart/>
+            <AnswersChart answersData={answerData} />
         </div>
     );
 };

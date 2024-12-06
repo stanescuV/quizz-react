@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
   ChartConfig,
@@ -9,58 +9,64 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "./ui/chart"
+} from "./ui/chart";
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
-
+// Chart configuration
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  correct: {
+    label: "Correct",
     color: "#2563eb",
   },
-  mobile: {
-    label: "Mobile",
+  false: {
+    label: "False",
     color: "#60a5fa",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
-//TODO: answersData and answer ENTITY 
+// AnswersChart Component
+export function AnswersChart({ answersData }: { answersData: any[] }) {
+  // Process answersData to prepare the chart data
+  const processedData = answersData.reduce((acc: any[], answer: any) => {
+    const questionKey = Object.keys(answer)[0]; // Get the question key
+    const { isCorrect } = answer[questionKey]; // Extract correctness flag
 
-export function AnswersChart(answersData:any = [] ) {
-    const renderAnswers = (answersData:any) => {
-        return answersData.map((answer:any)=>{
-            return(
-                <div>
-                    {answer.hey}
-                </div>
-            )
-        })
+    // Find or create an entry for the question
+    let entry = acc.find((item) => item.question === questionKey);
+    if (!entry) {
+      entry = { question: questionKey, correct: 0, false: 0 };
+      acc.push(entry);
     }
-    return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-        <BarChart accessibilityLayer data={chartData}>
-        <CartesianGrid vertical={false} />
-        <XAxis
-            dataKey="month"
+
+    // Update correct or false count
+    if (isCorrect) {
+      entry.correct += 1;
+    } else {
+      entry.false += 1;
+    }
+
+    return acc;
+  }, []);
+
+  return (
+    <div className="bg-white">
+      <ChartContainer config={chartConfig} className="min-h-[200px] w-1/2">
+        <BarChart accessibilityLayer data={processedData}>
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="question"
             tickLine={false}
             tickMargin={10}
             axisLine={false}
-            tickFormatter={(value) => value.slice(0, 3)}
-        />
-        <ChartTooltip content={<ChartTooltipContent />} />
-        <ChartLegend content={<ChartLegendContent />} />
-        <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-        <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+            tickFormatter={(value) => value.slice(0, 20)} // Shorten the question text
+          />
+          <YAxis />
+          <ChartTooltip content={<ChartTooltipContent />} />
+          <ChartLegend content={<ChartLegendContent />} />
+          <Bar dataKey="correct" fill={chartConfig.correct.color} radius={4} />
+          <Bar dataKey="false" fill={chartConfig.false.color} radius={4} />
         </BarChart>
-    </ChartContainer>
-    )
+      </ChartContainer>
+    </div>
+  );
 }
 
-export default AnswersChart;
