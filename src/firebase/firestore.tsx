@@ -72,6 +72,22 @@ const readSessionWithId = async (idSession: string) => {
 }
 
 /**
+ * takes id session and returns session.answer
+ */
+const readSessionWithIdReturnsAnswers = async (idSession: string | undefined) => {
+  if(!idSession){
+    return [];
+  }
+
+  const sessionRef = doc(db, 'sessions', idSession);
+  const docSnap = await getDoc(sessionRef);
+  const answers = (docSnap.data())?.answers || undefined
+  console.log(answers);
+  return answers;
+}
+
+
+/**
  * takes id session and returns form
  */
 const readFormularWithSessionId = async (idSession: string) => {
@@ -103,4 +119,4 @@ const deleteData = async (id: string) => {
   await deleteDoc(doc(db, "forms", `${id}`));
   console.log("data has been deleted ")
 }
-export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName, readFormularWithSessionId};
+export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName, readFormularWithSessionId , readSessionWithIdReturnsAnswers};

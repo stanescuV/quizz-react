@@ -1,5 +1,6 @@
 "use client";
 
+
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
@@ -25,13 +26,18 @@ const chartConfig = {
 
 // AnswersChart Component
 export function AnswersChart({ answersData }: { answersData: any[] }) {
+
+  //TODO:VERIFY this 
+  console.log(typeof answersData)
   // Process answersData to prepare the chart data
   const processedData = answersData.reduce((acc: any[], answer: any) => {
-    const questionKey = Object.keys(answer)[0]; // Get the question key
-    const { isCorrect } = answer[questionKey]; // Extract correctness flag
+    const questionKey = Object.keys(answer)[0]; 
+    const {isCorrect} = answer[questionKey]; 
+    console.log(isCorrect)
 
     // Find or create an entry for the question
     let entry = acc.find((item) => item.question === questionKey);
+
     if (!entry) {
       entry = { question: questionKey, correct: 0, false: 0 };
       acc.push(entry);
