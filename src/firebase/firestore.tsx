@@ -81,8 +81,8 @@ const readSessionWithIdReturnsAnswers = async (idSession: string | undefined) =>
 
   const sessionRef = doc(db, 'sessions', idSession);
   const docSnap = await getDoc(sessionRef);
-  const answers = (docSnap.data())?.answers || undefined
-  console.log(answers);
+  const answers = (docSnap.data())?.answers || undefined;
+  console.log('firestore answers',answers);
   return answers;
 }
 

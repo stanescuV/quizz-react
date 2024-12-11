@@ -1,7 +1,7 @@
 "use client";
 
-
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import HostPageAnswer  from "../entities/hostPageAnswers"; // Assuming HostPageAnswer is defined correctly
 
 import {
   ChartConfig,
@@ -24,46 +24,54 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+// Define the shape of each answer object
+type AnswerObject = {
+  question: string;
+  isCorrect: boolean;
+  selectedOption: string;
+};
+
 // AnswersChart Component
-export function AnswersChart({ answersData }: { answersData: any[] }) {
+export function AnswersChart({ answersData }: { answersData: { [key: string]: AnswerObject }[] }) {
+  console.log("Input answersData:", answersData); // Debugging log
 
-  //TODO:VERIFY this 
-  console.log(typeof answersData)
   // Process answersData to prepare the chart data
-  const processedData = answersData.reduce((acc: any[], answer: any) => {
-    const questionKey = Object.keys(answer)[0]; 
-    const {isCorrect} = answer[questionKey]; 
-    console.log(isCorrect)
+  const processedData: HostPageAnswer[] = answersData.reduce((acc: HostPageAnswer[], answerObj) => {
+    // Iterate through each question object in answerObj
+    Object.entries(answerObj).forEach(([questionKey, answer]) => {
+      const { isCorrect } = answer;
 
-    // Find or create an entry for the question
-    let entry = acc.find((item) => item.question === questionKey);
+      // Find or create an entry for the question
+      let entry = acc.find((item) => item.question === questionKey);
+      if (!entry) {
+        entry = { question: questionKey, correct: 0, false: 0 };
+        acc.push(entry);
+      }
 
-    if (!entry) {
-      entry = { question: questionKey, correct: 0, false: 0 };
-      acc.push(entry);
-    }
-
-    // Update correct or false count
-    if (isCorrect) {
-      entry.correct += 1;
-    } else {
-      entry.false += 1;
-    }
+      // Update correct or false count based on isCorrect value
+      if (isCorrect) {
+        entry.correct += 1;
+      } else {
+        entry.false += 1;
+      }
+    });
 
     return acc;
   }, []);
 
+  console.log("Processed chart data:", processedData); // Debugging log
+
   return (
-    <div className="bg-white">
-      <ChartContainer config={chartConfig} className="min-h-[200px] w-1/2">
-        <BarChart accessibilityLayer data={processedData}>
-          <CartesianGrid vertical={false} />
+    <div className="bg-white p-4 rounded-lg shadow-md">
+      <ChartContainer config={chartConfig} className="min-h-[200px] w-full max-w-3xl mx-auto">
+        <BarChart data={processedData} barGap={4}>
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <XAxis
             dataKey="question"
             tickLine={false}
             tickMargin={10}
             axisLine={false}
-            tickFormatter={(value) => value.slice(0, 20)} // Shorten the question text
+            tickFormatter={(value) => value.slice(0, 20)} // Shorten question names if too long
           />
           <YAxis />
           <ChartTooltip content={<ChartTooltipContent />} />
@@ -75,4 +83,3 @@ export function AnswersChart({ answersData }: { answersData: any[] }) {
     </div>
   );
 }
-
