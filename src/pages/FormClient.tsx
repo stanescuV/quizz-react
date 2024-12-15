@@ -14,13 +14,14 @@ function FormClient() {
   const { id } = useParams<{ id: string }>();
   const idSession = id || "";
 
-
+//TODO: cand intra pe pagina COOKIE / UUID ai raspuns sau n ai raspuns 
 // WS functions 
 
   function sendMessage( message: any, ws: WebSocket) {
     if (ws.readyState === WebSocket.OPEN) {
       message.id = idSession; 
       const dataToSend = JSON.stringify(message);
+      console.log(dataToSend)
       ws.send(dataToSend);
     } else {
       //TODO: SEND AN ERROR TO CLIENT
