@@ -4,6 +4,7 @@ import { FormEntity } from "../entities/formDB";
 import {  readFormularWithSessionId } from "../firebase/firestore";
 import { useEffect, useState } from 'react';
 import { Formular } from "../entities/form";
+import { v4 as uuidv4 } from 'uuid';
 
 
 //WS
@@ -13,15 +14,77 @@ function FormClient() {
   // Get the id from the URL using useParams
   const { id } = useParams<{ id: string }>();
   const idSession = id || "";
+  let cookie: string | null; 
 
+  function convertFormFrontendIntoFormCookies(form: any) {
+    let newFormCookies: { [key: string]: any } = { id: form.id };
+  
+    for (let key in form) {
+      if (key !== 'id' && form[key].selectedOption !== '') {
+        // Use bracket notation to dynamically set the property name
+        newFormCookies[key] = { selectedOption: form[key].selectedOption };
+      }
+    }
+    return newFormCookies;
+  }
+  
 //TODO: cand intra pe pagina COOKIE / UUID ai raspuns sau n ai raspuns 
+//LOCAL STORAGE
+
+
+function checkOrSetUUID() {
+  const key = 'form-specific-uuid'; // Change this to your app's specific key
+
+  // Function to get the value of a cookie by name
+  function getCookie(name:string) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  }
+
+  // Function to set a cookie with name, value, and optional attributes
+  function setCookie(name: string, value: string, days: number) {
+    let expires = '';
+    if (days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = '; expires=' + date.toUTCString();
+    }
+    document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/';
+  }
+
+  let cookie = getCookie(key);
+
+  if (!cookie) {
+    let uuid = uuidv4();
+    setCookie(key, uuid, 365);
+    
+    //the cookie that we will send to server
+    cookie = getCookie(key);
+    console.log(cookie)
+    
+    console.log('UUID created and stored in cookies:', cookie);
+  } else {
+    console.log('UUID already exists in cookies:', cookie);
+  }
+
+  return cookie;
+}
+
+cookie = checkOrSetUUID();
 // WS functions 
 
   function sendMessage( message: any, ws: WebSocket) {
     if (ws.readyState === WebSocket.OPEN) {
       message.id = idSession; 
+      const formCookie = convertFormFrontendIntoFormCookies(message);
+
+      if(cookie){
+        const formDbCookie = {[cookie]: formCookie}
+        message.formDbCookie = formDbCookie; 
+      }
+
       const dataToSend = JSON.stringify(message);
-      console.log(dataToSend)
+      console.log(dataToSend);
       ws.send(dataToSend);
     } else {
       //TODO: SEND AN ERROR TO CLIENT
@@ -146,7 +209,7 @@ function FormClient() {
     <form >
       {renderFormular(formFrontend)}
       <button
-        onClick={() => sendMessage(formFrontend, _ws)}
+        onClick={() =>{ sendMessage(formFrontend, _ws); convertFormFrontendIntoFormCookies(formFrontend)}}
         type="button"
         className="mt-3 ml-2 p-3 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >

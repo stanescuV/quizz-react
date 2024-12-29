@@ -1,5 +1,5 @@
 interface Answer {
-    [key:string] : {
+    [questionKey:string] : {
         isCorrect: boolean; //true
         question: string; // how much is 2 + 2 ? 
         selectedOption: string // option1
