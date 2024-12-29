@@ -22,9 +22,12 @@ function FormClient() {
     for (let key in form) {
       if (key !== 'id' && form[key].selectedOption !== '') {
         // Use bracket notation to dynamically set the property name
-        newFormCookies[key] = { selectedOption: form[key].selectedOption };
+        newFormCookies[key] = form[key].selectedOption;
       }
     }
+    console.log(newFormCookies);
+
+
     return newFormCookies;
   }
   
