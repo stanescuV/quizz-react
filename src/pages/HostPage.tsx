@@ -1,45 +1,46 @@
-import  { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import {AnswersChart} from '../components/AnswersChart';
-import { readSessionWithIdReturnsAnswers } from '../firebase/firestore';
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import { AnswersChart } from "../components/AnswersChart";
+import { readSessionWithIdReturnsAnswers } from "../firebase/firestore";
 
 const HostPage = () => {
     // Destructure both parameters from useParams
-    const { hostId, sessionId } = useParams<{ hostId: string; sessionId: string }>();
+    const { hostId, sessionId } = useParams<{
+        hostId: string;
+        sessionId: string;
+    }>();
     const [answerData, setAnswerData] = useState<Array<any>>([]);
-    
-    
-    
-  
+
     // Ref to hold the WebSocket instance
     const wsRef = useRef<WebSocket | null>(null);
 
     useEffect(() => {
         // Only connect if both ids are provided
         if (sessionId && hostId) {
-            wsRef.current = new WebSocket('ws://localhost:3001');
+            wsRef.current = new WebSocket("ws://localhost:3001");
 
             wsRef.current.onopen = () => {
                 const adminObject = {
-                    adminMessage: 'Admin has connected',
+                    adminMessage: "Admin has connected",
                     adminId: hostId,
-                    adminSession: sessionId
+                    adminSession: sessionId,
                 };
-                
-                readSessionWithIdReturnsAnswers(sessionId).then((answers)=>{
-                    setAnswerData(answers)
-                })
+
+                readSessionWithIdReturnsAnswers(sessionId).then((answers) => {
+                    setAnswerData(answers);
+                });
 
                 const dataToSend = JSON.stringify(adminObject);
                 wsRef.current?.send(dataToSend);
             };
 
             wsRef.current.onmessage = (event) => {
-                //TODO: ANSWER ENTITY !! 
-                readSessionWithIdReturnsAnswers(sessionId).then((answers)=>{
+                //TODO: ANSWER ENTITY !!
+                readSessionWithIdReturnsAnswers(sessionId).then((answers) => {
+                    console.log("host page answerData", answerData);
                     setAnswerData(answers);
-                })
-                
+                });
+
                 console.log("Message from server:", event.data);
             };
         }
@@ -53,15 +54,13 @@ const HostPage = () => {
         };
     }, [sessionId, hostId]);
 
-    
-
     return (
         <div>
             <h1>Host Page</h1>
             <p>Host ID: {hostId}</p>
             <p>Session ID: {sessionId}</p>
 
-            {answerData.length && <AnswersChart answersData={answerData} />} 
+            {answerData.length && <AnswersChart answersData={answerData} />}
         </div>
     );
 };
