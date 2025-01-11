@@ -1,7 +1,7 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import HostPageAnswer from "../entities/hostPageAnswers"; // Assuming HostPageAnswer is defined correctly
+import HostPageAnswer from "../entities/hostPageAnswers";
 
 import {
     ChartConfig,
@@ -12,8 +12,7 @@ import {
     ChartTooltipContent,
 } from "./ui/chart";
 
-//TODO: WRITE THIS ON YOUR OWN
-// Chart configuration
+// Colors and Labels for the Chart
 const chartConfig = {
     correct: {
         label: "Correct",
@@ -25,48 +24,56 @@ const chartConfig = {
     },
 } satisfies ChartConfig;
 
-// Define the shape of each answer object
+// how objects in the props look
 type AnswerObject = {
-    question: string;
     date: string;
-    isCorrect: boolean;
-    selectedOption: string;
+    [key: string]:
+        | {
+              question: string;
+              isCorrect: boolean;
+              selectedOption: string;
+          }
+        | string;
 };
 
-// AnswersChart Component
-export function AnswersChart({
-    answersData,
-}: {
-    answersData: { [key: string]: AnswerObject }[];
-}) {
-    console.log("Input answersData:", answersData); // Debugging log
+// What we recive in the props
+type AnswersChartProps = {
+    answersData: AnswerObject[];
+};
 
-    // Process answersData to prepare the chart data
-    const processedData: HostPageAnswer[] = answersData.reduce(
-        (acc: HostPageAnswer[], answerObj) => {
-            // Iterate through each question object in answerObj
-            Object.entries(answerObj).forEach(([questionKey, answer]) => {
-                const { isCorrect } = answer;
+/**
+ *  We take answersData : AnswersChartProps
+ * and we make it processedData so we can show it easily on the frontend
+ * */
+export function AnswersChart({ answersData }: AnswersChartProps) {
+    console.log("Input answersData:", answersData);
 
-                // Find or create an entry for the question
-                let entry = acc.find((item) => item.question === questionKey);
-                if (!entry) {
-                    entry = { question: questionKey, correct: 0, false: 0 };
-                    acc.push(entry);
+    //we take answersData we make it processedData
+
+    const processedData: HostPageAnswer[] = [];
+    const questionLookup: { [key: string]: HostPageAnswer } = {};
+
+    answersData.forEach((answerObj) => {
+        for (const key in answerObj) {
+            if (key !== "date" && typeof answerObj[key] === "object") {
+                const value = answerObj[key];
+                const { question, isCorrect } = value;
+
+                // O(1)
+                if (!questionLookup[question]) {
+                    questionLookup[question] = {
+                        question,
+                        correct: 0,
+                        false: 0,
+                    };
+                    processedData.push(questionLookup[question]); // Keep processedData for chart rendering
                 }
 
-                // Update correct or false count based on isCorrect value
-                if (isCorrect) {
-                    entry.correct += 1;
-                } else {
-                    entry.false += 1;
-                }
-            });
-
-            return acc;
-        },
-        []
-    );
+                // Update counts using the lookup object
+                questionLookup[question][isCorrect ? "correct" : "false"] += 1;
+            }
+        }
+    });
 
     console.log("Processed chart data:", processedData); // Debugging log
 
