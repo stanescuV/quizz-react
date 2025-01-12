@@ -35,12 +35,18 @@ const HostPage = () => {
             };
 
             wsRef.current.onmessage = (event) => {
-                //TODO: ANSWER ENTITY !!
-                readSessionWithIdReturnsAnswers(sessionId).then((answers) => {
-                    console.log("host page answerData", answerData);
-                    setAnswerData(answers);
-                });
 
+                //refresh the data if there was an insert while the admin was on the host page
+                const dataAsObject = JSON.parse(event.data) 
+
+                console.log({dataAsObject})
+                if(dataAsObject.refresh){
+                    readSessionWithIdReturnsAnswers(sessionId).then((answers) => {
+                        console.log("host page answerData", answerData);
+                        setAnswerData(answers);
+                    }); 
+                }
+           
                 console.log("Message from server:", event.data);
             };
         }
