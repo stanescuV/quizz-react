@@ -4,18 +4,14 @@ import { AnswersChart } from "../components/AnswersChart";
 import { readSessionWithIdReturnsAnswers } from "../firebase/firestore";
 
 const HostPage = () => {
-    // Destructure both parameters from useParams
     const { hostId, sessionId } = useParams<{
         hostId: string;
         sessionId: string;
     }>();
     const [answerData, setAnswerData] = useState<Array<any>>([]);
-
-    // Ref to hold the WebSocket instance
     const wsRef = useRef<WebSocket | null>(null);
 
     useEffect(() => {
-        // Only connect if both ids are provided
         if (sessionId && hostId) {
             wsRef.current = new WebSocket("ws://localhost:3001");
 
@@ -26,32 +22,28 @@ const HostPage = () => {
                     adminSession: sessionId,
                 };
 
+                // Initial data fetch
                 readSessionWithIdReturnsAnswers(sessionId).then((answers) => {
-                    setAnswerData(answers);
+                    console.log("Initial answers fetched:", answers);
+                    setAnswerData([...answers]);
                 });
 
                 const dataToSend = JSON.stringify(adminObject);
                 wsRef.current?.send(dataToSend);
             };
 
-            wsRef.current.onmessage = (event) => {
+            wsRef.current.onmessage = async (event) => {
+                console.log("WebSocket message received:", event.data);
 
-                //refresh the data if there was an insert while the admin was on the host page
-                const dataAsObject = JSON.parse(event.data) 
+                // Fetch updated answers
+                const answers = await readSessionWithIdReturnsAnswers(sessionId);
+                console.log("Updated answers fetched:", answers);
 
-                console.log({dataAsObject})
-                if(dataAsObject.refresh){
-                    readSessionWithIdReturnsAnswers(sessionId).then((answers) => {
-                        console.log("host page answerData", answerData);
-                        setAnswerData(answers);
-                    }); 
-                }
-           
-                console.log("Message from server:", event.data);
+                // Trigger state update
+                setAnswerData([...answers]);
             };
         }
 
-        // Clean up WebSocket connection on component unmount
         return () => {
             if (wsRef.current) {
                 wsRef.current.close();
@@ -66,7 +58,7 @@ const HostPage = () => {
             <p>Host ID: {hostId}</p>
             <p>Session ID: {sessionId}</p>
 
-            {answerData.length && <AnswersChart answersData={answerData} />}
+            {answerData.length > 0 && <AnswersChart answersData={answerData} />}
         </div>
     );
 };

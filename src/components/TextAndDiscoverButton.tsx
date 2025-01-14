@@ -2,7 +2,7 @@
 function TextAndDiscoverButton() {
   return (
     <div className="w-full flex items-center flex-col justify-center w-1/2 text-center bg-white py-3">
-        <h3 className="text-[#6e4fff] text-5xl text-center font-extrabold font-pops pt-10">
+        <h3 className="text-[#6e4fff]  text-5xl text-center font-bold font-pops pt-10">
             So are you in ? 
         </h3>
         <div className="text-black text-lg text-center font-normal font-['Inter'] pt-10 ">

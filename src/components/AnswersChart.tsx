@@ -1,8 +1,8 @@
 "use client";
 
+import  { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import HostPageAnswer from "../entities/hostPageAnswers";
-
 import {
     ChartConfig,
     ChartContainer,
@@ -24,7 +24,7 @@ const chartConfig = {
     },
 } satisfies ChartConfig;
 
-// how objects in the props look
+// Props type
 type AnswerObject = {
     date: string;
     [key: string]:
@@ -36,46 +36,47 @@ type AnswerObject = {
         | string;
 };
 
-// What we recive in the props
 type AnswersChartProps = {
     answersData: AnswerObject[];
 };
 
 /**
- *  We take answersData : AnswersChartProps
- * and we make it processedData so we can show it easily on the frontend
- * */
+ * This component processes the received answers data into a format usable by the chart.
+ */
 export function AnswersChart({ answersData }: AnswersChartProps) {
-    console.log("Input answersData:", answersData);
+    console.log("Received answersData in AnswersChart:", answersData);
 
-    //we take answersData we make it processedData
+    // Process data only when answersData changes
+    const processedData = useMemo(() => {
+        const result: HostPageAnswer[] = [];
+        const questionLookup: { [key: string]: HostPageAnswer } = {};
 
-    const processedData: HostPageAnswer[] = [];
-    const questionLookup: { [key: string]: HostPageAnswer } = {};
-
-    answersData.forEach((answerObj) => {
-        for (const key in answerObj) {
-            if (key !== "date" && typeof answerObj[key] === "object") {
-                const value = answerObj[key];
-                const { question, isCorrect } = value;
-
-                // O(1)
-                if (!questionLookup[question]) {
-                    questionLookup[question] = {
-                        question,
-                        correct: 0,
-                        false: 0,
+        answersData.forEach((answerObj) => {
+            for (const key in answerObj) {
+                if (key !== "date" && typeof answerObj[key] === "object") {
+                    const value = answerObj[key] as {
+                        question: string;
+                        isCorrect: boolean;
                     };
-                    processedData.push(questionLookup[question]); // Keep processedData for chart rendering
+                    const { question, isCorrect } = value;
+
+                    if (!questionLookup[question]) {
+                        questionLookup[question] = {
+                            question,
+                            correct: 0,
+                            false: 0,
+                        };
+                        result.push(questionLookup[question]);
+                    }
+
+                    questionLookup[question][isCorrect ? "correct" : "false"] += 1;
                 }
-
-                // Update counts using the lookup object
-                questionLookup[question][isCorrect ? "correct" : "false"] += 1;
             }
-        }
-    });
+        });
 
-    console.log("Processed chart data:", processedData); // Debugging log
+        console.log("Processed chart data:", result);
+        return result;
+    }, [answersData]); // Dependency on answersData
 
     return (
         <div className="bg-white p-4 rounded-lg shadow-md">
@@ -90,7 +91,7 @@ export function AnswersChart({ answersData }: AnswersChartProps) {
                         tickLine={false}
                         tickMargin={10}
                         axisLine={false}
-                        tickFormatter={(value) => value.slice(0, 20)} // Shorten question names if too long
+                        tickFormatter={(value) => value.slice(0, 20)} // Shorten question names
                     />
                     <YAxis />
                     <ChartTooltip content={<ChartTooltipContent />} />
