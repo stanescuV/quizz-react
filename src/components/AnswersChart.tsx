@@ -1,6 +1,6 @@
 "use client";
 
-import  { useMemo } from "react";
+import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import HostPageAnswer from "../entities/hostPageAnswers";
 import {
@@ -69,7 +69,9 @@ export function AnswersChart({ answersData }: AnswersChartProps) {
                         result.push(questionLookup[question]);
                     }
 
-                    questionLookup[question][isCorrect ? "correct" : "false"] += 1;
+                    questionLookup[question][
+                        isCorrect ? "correct" : "false"
+                    ] += 1;
                 }
             }
         });
@@ -108,6 +110,16 @@ export function AnswersChart({ answersData }: AnswersChartProps) {
                     />
                 </BarChart>
             </ChartContainer>
+
+            <div>
+                {processedData.map((hostPageAnswer) => {
+                    return (
+                        <div>
+                            {hostPageAnswer.question} Correct : {hostPageAnswer.correct} False: {hostPageAnswer.false}
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }
