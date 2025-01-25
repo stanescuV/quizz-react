@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import FormClient from './pages/FormClient';
 import Forms from './pages/Forms';
 import HostPage from './pages/HostPage'
+import MyForms from './components/MyForms';
 
 
 const App: React.FC = () => {
@@ -22,6 +23,8 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/session/:id?" element={<FormClient  />} />
             <Route path="/host/:hostId?/:sessionId?" element={<HostPage  />} />
+            <Route path="/myforms" element={<MyForms  />} />
+
           </Routes>
       </Router>
     </AuthProvider>

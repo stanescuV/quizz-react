@@ -10,6 +10,10 @@ function SignUser({}: Props) {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
+    //TODO: callable passwordSecure
+    const isPasswordSecure = () => {
+
+    }
     const handleLogin = (event: React.FormEvent) => {
         event.preventDefault();
 
@@ -38,14 +42,14 @@ function SignUser({}: Props) {
                     htmlFor="username"
                     className="text-sm font-semibold text-gray-600 mb-2"
                 >
-                    Username (Email):
+                    Email:
                 </label>
                 <input
                     type="text"
                     id="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Enter your username (email)"
+                    placeholder="asd@gmail.com"
                     className="p-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
             </div>
@@ -61,7 +65,7 @@ function SignUser({}: Props) {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
+                    placeholder="*********"
                     className="p-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
             </div>
