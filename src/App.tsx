@@ -18,8 +18,8 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/forms" element={<Forms />} />
-            <Route path="/signIn" element={<SignIn />} />
-            <Route path="/logIn" element={<Login />} />
+            <Route path="/signup" element={<SignIn />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/session/:id?" element={<FormClient  />} />
             <Route path="/host/:hostId?/:sessionId?" element={<HostPage  />} />
           </Routes>
