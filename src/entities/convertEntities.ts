@@ -2,7 +2,7 @@ import { FormEntity, OptionDB, QuestionDB } from "./formDB";
 import { Formular } from "./form";
 
 //this converts the formular from the frontend entity into the DB entity
-function convertFormularToFormEntity(formular: Formular, name: string, host: string): FormEntity {
+function convertFormularToFormEntity(formular: Formular, name: string, host: string , id:string=""): FormEntity {
     const questions: QuestionDB[] = Object.values(formular).map((q) => {
         const options: OptionDB[] = Object.keys(q.options).map((key) => ({
             isSelected: key === q.selectedOption,
@@ -19,6 +19,8 @@ function convertFormularToFormEntity(formular: Formular, name: string, host: str
         host,
         name, 
         questions,
+        id
+        
     };
 } 
 
@@ -43,7 +45,7 @@ function convertFormEntityToFormular(form: FormEntity): Formular {
         formular[`question${index + 1}`] = {
         question: questionData.question,
         options: optionsForm,
-        selectedOption: ""
+        selectedOption: "",
         };
     });
 

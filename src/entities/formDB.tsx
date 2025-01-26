@@ -16,6 +16,7 @@ interface FormEntity {
     host: string;
     name: string;
     questions: QuestionDB[];
+    id:string;
 }
 
 // Create the formEntity object
@@ -26,6 +27,7 @@ const formEntity: FormEntity = {
         { question: "", options: [{ isSelected: false, option1: "" }] },
         { question: "", options: [{ isSelected: true, option2: "" }] }
     ],
+    id:""
 };
 
 export type { FormEntity, QuestionDB, OptionDB }; // Export the type

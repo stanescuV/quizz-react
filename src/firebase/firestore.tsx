@@ -50,24 +50,36 @@ const findAllForms = async () => {
 }
 
 //ex : host : YEfwrMFB2JdVran7Ea4z8sgE7642 --> all forms the user wrote 
-const findFormsWithHostId = async (id: string) => { 
-  
-  const q = query(formsRef, where('host', "==", id));
-
+//TODO: collection with []arrays so O(1)    [at insert time]
+const findFormsWithHostId = async (id: string): Promise<FormEntity[]> => {
+  const q = query(formsRef, where("host", "==", id));
+  const arrayOfForms: FormEntity[] = [];
   const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
-  });
-}
 
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    data.id = doc.id;
+    // Ensure the data matches FormEntity
+    arrayOfForms.push(data as FormEntity);
+  });
+
+  return arrayOfForms;
+};
+
+const findFormWithFormId = async (idForm: string) => {
+  const formRef = doc(db, 'forms', idForm);
+  const docSnap = await getDoc(formRef);
+  // console.log(docSnap)
+  console.log(docSnap.data())
+  return docSnap.data();
+}
 /**
  * takes id session and returns session
  */
 const readSessionWithId = async (idSession: string) => {
   const sessionRef = doc(db, 'sessions', idSession);
   const docSnap = await getDoc(sessionRef);
-  console.log(docSnap.data());
+  // console.log(docSnap.data());
   return docSnap.data();
 }
 
@@ -119,4 +131,4 @@ const deleteData = async (id: string) => {
   await deleteDoc(doc(db, "forms", `${id}`));
   console.log("data has been deleted ")
 }
-export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName, readFormularWithSessionId , readSessionWithIdReturnsAnswers};
+export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName, readFormularWithSessionId , readSessionWithIdReturnsAnswers, findFormWithFormId};
