@@ -2,7 +2,12 @@ import { FormEntity, OptionDB, QuestionDB } from "./formDB";
 import { Formular } from "./form";
 
 //this converts the formular from the frontend entity into the DB entity
-function convertFormularToFormEntity(formular: Formular, name: string, host: string , id:string=""): FormEntity {
+function convertFormularToFormEntity(
+    formular: Formular,
+    name: string,
+    host: string,
+    id: string = ""
+): FormEntity {
     const questions: QuestionDB[] = Object.values(formular).map((q) => {
         const options: OptionDB[] = Object.keys(q.options).map((key) => ({
             isSelected: key === q.selectedOption,
@@ -17,12 +22,11 @@ function convertFormularToFormEntity(formular: Formular, name: string, host: str
 
     return {
         host,
-        name, 
+        name,
         questions,
-        id
-        
+        id,
     };
-} 
+}
 
 function convertFormEntityToFormular(form: FormEntity): Formular {
     const questions = Object.values(form.questions);
@@ -31,27 +35,31 @@ function convertFormEntityToFormular(form: FormEntity): Formular {
 
     questions.forEach((questionData, index) => {
         let optionsForm: { [key: string]: string } = {};
+        let correctOption = "";
 
-        // Iterate over each option to reconstruct the options and identify the selected one
+        // iterate over each option to reconstruct the options and identify the selected one
         questionData.options.forEach((option) => {
-            // Extract the actual key-value pair for the option 
-            const [key, value] = Object.entries(option).find(([k]) => k !== 'isSelected')!;
+
+            const [key, value] = Object.entries(option).find(
+                ([k]) => k !== "isSelected"
+            )!; // ! shows that we re 100% sure this wont fail, maybe it's not the good idea to keep it but i'll keep it for the moment
+
+            if (option.isSelected) {
+                correctOption = key;
+            }
+
             optionsForm[key] = value;
+        });
 
-            
-        }); 
-
-        // Rebuild the question object for the frontend structure
+        // rebuild the question object for the frontend structure
         formular[`question${index + 1}`] = {
-        question: questionData.question,
-        options: optionsForm,
-        selectedOption: "",
+            question: questionData.question,
+            options: optionsForm,
+            selectedOption: correctOption,
         };
     });
 
     return formular;
 }
-  
 
-  export  {convertFormularToFormEntity, convertFormEntityToFormular}
-  
+export { convertFormularToFormEntity, convertFormEntityToFormular };

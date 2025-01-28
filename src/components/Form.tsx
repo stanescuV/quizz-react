@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { convertFormEntityToFormular, convertFormularToFormEntity } from "../entities/convertEntities";
+import {
+    convertFormEntityToFormular,
+    convertFormularToFormEntity,
+} from "../entities/convertEntities";
 import { useAuth } from "../firebase/authContext";
 import { Formular } from "../entities/form";
 import { addFormDb, findFormWithFormId } from "../firebase/firestore";
@@ -17,54 +20,48 @@ function Form({ document }: { document: Formular }) {
     //User
     const { currentUser } = useAuth();
 
-    //react router
     // const navigate = useNavigate();
 
-    
     //The global form we are going to modify along the way
     const [formular, setFormular] = useState<Formular>({});
     const [questionToDelete, setQuestionToDelete] = useState("");
     const [formName, setFormName] = useState("");
     const [idForm, setIdForm] = useState("");
 
-
     //Default input
     let defaultInput = {};
 
-    useEffect(()=>{
-      if (!idFormUrl) {
-        
-        defaultInput = {
-              question1: {
-                  question: "",
-                  options: {
-                      option1: "",
-                      option2: "",
-                      option3: "",
-                      option4: "",
-                  },
-                  selectedOption: "",
-              },
-        };
+    useEffect(() => {
+        if (!idFormUrl) {
+            defaultInput = {
+                question1: {
+                    question: "",
+                    options: {
+                        option1: "",
+                        option2: "",
+                        option3: "",
+                        option4: "",
+                    },
+                    selectedOption: "",
+                },
+            };
 
-        setFormular(defaultInput);
-      } else {
-        findFormWithFormId(idFormUrl).then(r =>{
-  
-          if(!r){
-            console.log("no forms found with this id")
-            return; 
-          }
-          
-          setFormName(r.name);
-          defaultInput = convertFormEntityToFormular(r as FormEntity)
-          setFormular(defaultInput);
-        });
-        
-      }
-    },[])
-   
+            setFormular(defaultInput);
+        } else {
+            findFormWithFormId(idFormUrl).then((r) => {
+                if (!r) {
+                    console.log("no forms found with this id");
+                    return;
+                }
 
+                setFormName(r.name);
+                console.log(r)
+                defaultInput = convertFormEntityToFormular(r as FormEntity);
+                console.log({defaultInput})
+                setFormular(defaultInput);
+            });
+        }
+    }, []);
 
     const dynamicDefaultInput = (newFormularKey: keyof Formular) => {
         return {
