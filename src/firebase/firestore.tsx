@@ -23,20 +23,35 @@ const addFormDb = async (form: FormEntity) => {
   
       const insertedForm = await addDoc(formsRef, form);
       
-      const session: Session = { 
-        idForm: insertedForm.id, 
-        date: (new Date).toISOString(),
-        answers: []
-      }
+      const sessionId = createNewSessionReturnsIdSession(insertedForm.id);
 
-      const insertedSession = await addDoc(sessionsRef, session)
-      return insertedSession.id
+
+      return sessionId;
 
     } catch (err) {
       console.log(err)
     }
+}
+
+
+  /**
+   * takes a string formId and returns the Id of the session so we can connect to the session
+   * @param formId 
+   * @returns Id of the inserted session
+   */
+const createNewSessionReturnsIdSession = async (formId: string) =>{
+
+  const session: Session = { 
+    idForm: formId, 
+    date: (new Date).toISOString(),
+    answers: []
   }
 
+  const insertedSession = await addDoc(sessionsRef, session);
+  console.log('session created !! ', insertedSession.id)
+  return insertedSession.id
+
+}
 // add a method to see the forms added
 const findAllForms = async () => { 
   
@@ -131,4 +146,4 @@ const deleteData = async (id: string) => {
   await deleteDoc(doc(db, "forms", `${id}`));
   console.log("data has been deleted ")
 }
-export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName, readFormularWithSessionId , readSessionWithIdReturnsAnswers, findFormWithFormId};
+export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName, readFormularWithSessionId , readSessionWithIdReturnsAnswers, findFormWithFormId, createNewSessionReturnsIdSession};

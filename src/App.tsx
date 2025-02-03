@@ -4,7 +4,7 @@ import SignIn from './pages/SignIn';
 import Login from './pages/LogIn';
 import { AuthProvider } from './firebase/authContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import FormClient from './pages/FormClient';
+import FormClient from './components/FormClient';
 import Forms from './pages/Forms';
 import HostPage from './pages/HostPage'
 import MyFormsPage from './pages/MyFormsPage';

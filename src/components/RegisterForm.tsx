@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "./ui/button";
+import { Button } from "./shadcn-components/button";
 import {
     Form,
     FormControl,
@@ -13,8 +13,8 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
+} from "./shadcn-components/form";
+import { Input } from "./shadcn-components/input";
 
 const formSchema = z.object({
     username: z.string().min(2, {

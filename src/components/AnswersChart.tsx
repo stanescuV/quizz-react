@@ -10,7 +10,7 @@ import {
     ChartLegendContent,
     ChartTooltip,
     ChartTooltipContent,
-} from "./ui/chart";
+} from "./shadcn-components/chart";
 
 // Colors and Labels for the Chart
 const chartConfig = {
@@ -115,7 +115,9 @@ export function AnswersChart({ answersData }: AnswersChartProps) {
                 {processedData.map((hostPageAnswer) => {
                     return (
                         <div>
-                            {hostPageAnswer.question} Correct : {hostPageAnswer.correct} False: {hostPageAnswer.false}
+                            {hostPageAnswer.question} Correct :{" "}
+                            {hostPageAnswer.correct} False:{" "}
+                            {hostPageAnswer.false}
                         </div>
                     );
                 })}
