@@ -20,6 +20,7 @@ const HostPage = () => {
                     adminMessage: "Admin has connected",
                     adminId: hostId,
                     adminSession: sessionId,
+                    type:"AdminMessage"
                 };
 
                 // Initial data fetch
@@ -27,8 +28,9 @@ const HostPage = () => {
                     console.log("Initial answers fetched:", answers);
                     setAnswerData([...answers]);
                 });
-
+                
                 const dataToSend = JSON.stringify(adminObject);
+                
                 wsRef.current?.send(dataToSend);
             };
 

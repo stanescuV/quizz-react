@@ -11,6 +11,7 @@ import { Session } from '../entities/session';
 const formsRef = collection(db, 'forms');
 const sessionsRef = collection(db, 'sessions')
 
+
 // use this to insert a form in the DB
 /** it inserts in the DB, forms in firestore
  * and returns the idSession of the inserted doc
@@ -34,6 +35,9 @@ const addFormDb = async (form: FormEntity) => {
 }
 
 
+
+
+
   /**
    * takes a string formId and returns the Id of the session so we can connect to the session
    * @param formId 
@@ -52,6 +56,8 @@ const createNewSessionReturnsIdSession = async (formId: string) =>{
   return insertedSession.id
 
 }
+
+
 // add a method to see the forms added
 const findAllForms = async () => { 
   
