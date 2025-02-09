@@ -59,18 +59,20 @@ function FormClient() {
 
     function checkOrSetUUID() {
         cookie.current = getCookie(keyCookie);
+        
 
         if (!cookie.current) {
             let uuid = uuidv4();
             setCookie(keyCookie, uuid, 365);
             cookie.current = uuid;
-        } else {
-        }
+            return cookie.current;
+        } 
 
         return cookie.current;
     }
 
     useEffect(() => {
+
         //searches in browser for a cookie, if it finds it it gets it, if it doesn't he creates one
         cookie.current = checkOrSetUUID();
 
@@ -98,10 +100,11 @@ function FormClient() {
                     case "CorrecAnswersQuestionCount":
                         //when {question count + correctAnswers}
                         console.log(data);
-                        console.log({ data: JSON.parse(data) });
-                        setAnswersAndQuestionCount(JSON.parse(data));
+                        console.log({ data: data });
+                        setAnswersAndQuestionCount(data);
                         break;
 
+                        //TODO:This doesnt work properly 
                     case "CookieExistsAlready":
                         console.log("data", data)
                         window.alert(data.cookieMessageToShowOnFrontend);
