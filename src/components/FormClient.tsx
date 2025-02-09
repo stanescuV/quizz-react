@@ -104,7 +104,6 @@ function FormClient() {
                         setAnswersAndQuestionCount(data);
                         break;
 
-                        //TODO:This doesnt work properly 
                     case "CookieExistsAlready":
                         console.log("data", data)
                         window.alert(data.cookieMessageToShowOnFrontend);
