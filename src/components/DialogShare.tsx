@@ -84,9 +84,7 @@ export function DialogShare({
                 </div>
                 <DialogFooter className="sm:justify-start">
                     <DialogClose asChild>
-                        <Button type="button" variant="secondary">
-                            Close
-                        </Button>
+                        
                     </DialogClose>
                 </DialogFooter>
             <div className="flex justify-center items-center">{QRCodeGenerator(sessionLink)}</div>

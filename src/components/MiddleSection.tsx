@@ -23,7 +23,7 @@ const MiddleSection = () => {
         <div className="flex items-center flex-col w-1/2 text-center bg-[#6e4fff] relative">
             <div className=" mt-10 text-center text-white text-[31px] font-extrabold font-['Poppins'] ">Discover our quizzes <br/>click to play ! </div>
             <div className='flex-grow'></div>
-            <img src={Arrow} alt="arrow" className="w-60 h-60 absolute  top-4 left-1 animate-rotateLeft" />
+            <img src={Arrow} alt="arrow" className="w-60 h-60 absolute  top-0 -left-16 animate-rotateLeft" />
             <img src={Iphone} alt="Iphone with Vic" className="h-3/4 w-auto" />
         </div>
 
