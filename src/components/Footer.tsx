@@ -1,7 +1,7 @@
 function Footer() {
     const socials = ["Facebook", "Instagram", "Twitter"];
     return (
-        <footer className="footerContainer w-full justify-between bg-white flex pt-20 pb-20 pl-10">
+        <footer className="footerContainer w-full justify-between bg-white flex pt-20 pl-5">
             <div className="colFooter1 w-1/2">
                 <h5 className="text-[#6e4ffe] text-s font-bold mb-5 ">
                     Want to play ?

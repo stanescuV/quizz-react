@@ -1,9 +1,8 @@
 import Form from '../components/Form'
 import NavbarShad from '../components/NavbarShad'
 
-interface Props {}
 
-export default function Forms({}: Props) {
+export default function Forms() {
   return (
     <div>
         <NavbarShad/>
