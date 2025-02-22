@@ -27,13 +27,6 @@ function CarouselFront() {
                             "#3E63DD",
                         ];
                         const color = colors[index];
-                        const places = [
-                            "Education",
-                            "Training",
-                            "Feedback",
-                            "Entertainement",
-                            "Engagement",
-                        ];
 
                         return (
                             <CarouselItem
@@ -47,7 +40,7 @@ function CarouselFront() {
                                     >
                                         <CardContent className="flex flex-col select-none cursor-pointer">
                                             <span className="text-5xl font-semibold text-white font-pops">
-                                                {places[index]}
+                                                Education
                                             </span>
                                             <span className="mt-7 text-white font-pops">
                                                 Engaging group and distance

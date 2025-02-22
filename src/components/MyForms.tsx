@@ -7,7 +7,7 @@ import {
 import { FormEntity } from "../entities/formDB";
 import { useNavigate } from "react-router-dom";
 
-import { DialogCloseButton } from "./DialogShare";
+import {DialogShare } from "./DialogShare";
 
 const MyForms = () => {
     const { currentUser } = useAuth();
@@ -71,7 +71,7 @@ return (
             )}
         </div>
 
-        <DialogCloseButton sessionCode={sessionId} open={isDialogOpen} setOpen={setIsDialogOpen} />
+        <DialogShare sessionCode={sessionId} open={isDialogOpen} setOpen={setIsDialogOpen} />
     </div>
 );
 };

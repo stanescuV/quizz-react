@@ -9,7 +9,8 @@ import { Session } from '../entities/session';
 //CRUD METHODS 
 
 const formsRef = collection(db, 'forms');
-const sessionsRef = collection(db, 'sessions')
+const sessionsRef = collection(db, 'sessions');
+const sessionCodes8Digits = collection(db, 'sessionsCodes8Digits');
 
 
 // use this to insert a form in the DB
@@ -35,7 +36,19 @@ const addFormDb = async (form: FormEntity) => {
 }
 
 
+const createNew8DigitsCodeSession = async (code:{}) =>{
 
+  try{
+    await addDoc(sessionCodes8Digits, code);
+    console.log('session created !! ')
+  } catch (err){
+    //TODO: error handling on client side 
+    window.alert(err);
+    console.log({err});
+  }
+  
+
+}
 
 
   /**
@@ -94,6 +107,17 @@ const findFormWithFormId = async (idForm: string) => {
   console.log(docSnap.data())
   return docSnap.data();
 }
+
+/**
+ * takes id session and returns session
+ */
+const readSessionUUIDWith8DigitCode = async (code8Digits: string) => {
+  const sessionCodesRef = doc(db, 'sessions', code8Digits);
+  const docSnap = await getDoc(sessionCodesRef);
+  // console.log(docSnap.data());
+  return docSnap.data();
+}
+
 /**
  * takes id session and returns session
  */
@@ -152,4 +176,4 @@ const deleteData = async (id: string) => {
   await deleteDoc(doc(db, "forms", `${id}`));
   console.log("data has been deleted ")
 }
-export {addFormDb, findAllForms, deleteData, findFormsWithHostId, updateFormularName, readFormularWithSessionId , readSessionWithIdReturnsAnswers, findFormWithFormId, createNewSessionReturnsIdSession};
+export {addFormDb, findAllForms, deleteData, createNew8DigitsCodeSession, readSessionUUIDWith8DigitCode, findFormsWithHostId, updateFormularName, readFormularWithSessionId , readSessionWithIdReturnsAnswers, findFormWithFormId, createNewSessionReturnsIdSession};

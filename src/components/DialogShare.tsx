@@ -13,8 +13,9 @@ import {
 import { Input } from "./shadcn-components/input";
 import { Label } from "./shadcn-components/label";
 import QRCodeGenerator from "./QRCode";
+import { readSessionUUIDWith8DigitCode, createNew8DigitsCodeSession } from "../firebase/firestore";
 
-export function DialogCloseButton({
+export function DialogShare({
     sessionCode,
     open,
     setOpen,
@@ -23,6 +24,33 @@ export function DialogCloseButton({
     open: boolean;
     setOpen: (open: boolean) => void;
 }) {
+
+    async function createSessionCode (sessionUUID: string){
+        
+        let code = "";
+
+        for(let number = 0 ; number < 8; number ++){
+
+            let newNumber = Math.floor(Math.random() * 8);
+            code += String(newNumber); 
+            
+        }
+
+        console.log({code});
+        const session = await readSessionUUIDWith8DigitCode(code);
+
+        if(!session){
+            console.log("codul nu exista in baza de date");
+
+            const sessionCodes8DigitsObjectDB = {[code]:{sessionUUID}}
+            createNew8DigitsCodeSession(sessionCodes8DigitsObjectDB);
+            return;
+        }
+
+        console.log("The session code string :", session.sessionUUID)
+        
+    }
+    createSessionCode('99999999');
 
     const sessionLink = "http://localhost:5173/session/" + sessionCode;
     return (

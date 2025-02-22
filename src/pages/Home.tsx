@@ -4,6 +4,7 @@ import MiddleSection from "../components/MiddleSection";
 import CarouselFront from "../components/CarouselFront";
 import TextAndDiscoverButton from "../components/TextAndDiscoverButton";
 import RegisterForm from "../components/RegisterForm";
+import Footer from "../components/Footer";
 type Props = {};
 
 function Home({}: Props) {
@@ -15,6 +16,7 @@ function Home({}: Props) {
             <CarouselFront />
             <TextAndDiscoverButton />
             <RegisterForm />
+            <Footer/>
         </div>
     );
 }
