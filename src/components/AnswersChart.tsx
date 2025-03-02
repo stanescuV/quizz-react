@@ -112,11 +112,11 @@ export function AnswersChart({ answersData }: AnswersChartProps) {
             </ChartContainer>
 
             <div>
-                {processedData.map((hostPageAnswer) => {
+                {processedData.map((hostPageAnswer, index) => {
                     return (
-                        <div>
-                            {hostPageAnswer.question} Correct :{" "}
-                            {hostPageAnswer.correct} False:{" "}
+                        <div key={index}>
+                            {hostPageAnswer.question} Correct :
+                            {hostPageAnswer.correct} False:
                             {hostPageAnswer.false}
                         </div>
                     );

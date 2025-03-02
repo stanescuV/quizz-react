@@ -1,12 +1,11 @@
-import Form from '../components/Form'
-import NavbarShad from '../components/NavbarShad'
-
+import Form from '../components/Form';
+import NavbarShad from '../components/NavbarShad';
 
 export default function Forms() {
   return (
     <div>
-        <NavbarShad/>
-        <Form document={{}} />
+      <NavbarShad />
+      <Form document={{}} />
     </div>
-  )
+  );
 }

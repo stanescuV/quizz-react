@@ -71,7 +71,7 @@ return (
             )}
         </div>
 
-        <DialogShare sessionCode={sessionId} open={isDialogOpen} setOpen={setIsDialogOpen} />
+        <DialogShare sessionId={sessionId} open={isDialogOpen} setOpen={setIsDialogOpen} />
     </div>
 );
 };

@@ -1,5 +1,5 @@
 function Footer() {
-    const socials = ["Facebook", "Instagram", "Twitter"];
+    const socials = ['Facebook', 'Instagram', 'Twitter'];
     return (
         <footer className="footerContainer w-full justify-between bg-white flex pt-20 pl-5">
             <div className="colFooter1 w-1/2">
