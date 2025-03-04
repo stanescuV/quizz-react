@@ -47,8 +47,8 @@ function Footer() {
                     </div>
                 </div>
                 <div className="flex flex-col justify-start text-black items-start text-s font-semibold mt-1">
-                    {socials.map((social) => {
-                        return <button className="mt-3">{social}</button>;
+                    {socials.map((social, index) => {
+                        return <button key={index} className="mt-3">{social}</button>;
                     })}
                 </div>
             </div>

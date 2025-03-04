@@ -1,11 +1,15 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { convertFormEntityToFormularWithNoAnswersChecked } from '../entities/convertEntities';
 import { FormEntity } from '../entities/formDB';
-import { readFormularWithSessionId, readSessionUUIDWith8DigitCode } from '../firebase/firestore';
+import {
+  readFormularWithSessionId,
+  readSessionUUIDWith8DigitCode
+} from '../firebase/firestore';
 import { useEffect, useState, useRef } from 'react';
 import { Formular } from '../entities/form';
 import { v4 as uuidv4 } from 'uuid';
 import { DialogAnswers } from './DialogAnswers';
+import { DigitsCodeEntity } from '../entities/digitsCodeEntity';
 
 ////////////// WebSocket instance
 let _ws: WebSocket | null = null;
@@ -31,16 +35,9 @@ function FormClient() {
   //Navigation
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  let idSession = id || '';
-
-  //TODO:SESSION WITHJ 8 digits
-  // readSessionUUIDWith8DigitCode(idSession).then((r)=>{ if(r) idSession = r.sessionID})
-  
-
+  const [idSession, setIdSession] = useState(id || '');
 
   const cookie = useRef<string>('');
-  const keyCookie = idSession;
-
   const [formFrontend, setFormFrontend] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +46,19 @@ function FormClient() {
     correctAnswersNumber: 0,
     allQuestions: 0
   });
+
+  //////////////////////////SESSION CODE LOGIC //////////////////
+  /**
+   *
+   * @param digitsCode
+   * @returns idSession
+   */
+  async function getSessionUUIDUsing8DigitsCode(digitsCode: string) {
+    const sessionUUID: String =
+      ((await readSessionUUIDWith8DigitCode(digitsCode)) as DigitsCodeEntity)
+        .sessionID || '';
+    return sessionUUID;
+  }
 
   //TODO: put it in entities / form logic
   function convertFormFrontendIntoFormCookies(form: any) {
@@ -63,7 +73,24 @@ function FormClient() {
     return newFormCookies;
   }
 
-  function checkOrSetUUID() {
+  async function fetchForm(uuid: string) {
+    try {
+      const formFromDb: FormEntity = (await readFormularWithSessionId(
+        uuid
+      )) as unknown as FormEntity;
+
+      const formFrontend =
+        convertFormEntityToFormularWithNoAnswersChecked(formFromDb);
+      setFormFrontend(formFrontend);
+    } catch (err) {
+      console.log(err);
+      setError('Failed to load the form');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function checkOrSetUUID(keyCookie: string) {
     cookie.current = getCookie(keyCookie);
 
     if (!cookie.current) {
@@ -77,68 +104,64 @@ function FormClient() {
   }
 
   useEffect(() => {
-    //searches in browser for a cookie, if it finds it it gets it, if it doesn't he creates one
-    cookie.current = checkOrSetUUID();
+    //we make sure loading is true at the beggining
+    setLoading(true);
 
-    //open WS
-    if (idSession) {
-      _ws = new WebSocket('ws://localhost:3001');
+    //we use the 8 digits to get the real id Session
+    getSessionUUIDUsing8DigitsCode(idSession).then((uuidString) => {
+      //idk why but uuidString is String instead of string
+      const uuid = uuidString.toString();
 
-      _ws.onopen = () => {
-        if (_ws) {
-          _ws.send(
-            JSON.stringify({
-              type: 'CookieQuery',
-              cookie: cookie.current,
-              idSession: idSession
-            })
-          );
-        } else {
-          console.log('WS is null or undefined !');
-        }
-      };
+      //update the idSession
+      setIdSession(uuid);
 
-      _ws.onmessage = (event: MessageEvent) => {
-        const data = JSON.parse(event.data);
+      if (uuid) {
+        //open ws to get form data via server
+        _ws = new WebSocket('ws://localhost:3001');
 
-        console.log('event.data.type', data.type);
-        switch (data.type) {
-          case 'CorrecAnswersQuestionCount':
-            //when {question count + correctAnswers}
-            console.log(data);
-            console.log({ data: data });
-            setAnswersAndQuestionCount(data);
-            break;
+        _ws.onopen = () => {
+          if (_ws) {
+            _ws.send(
+              JSON.stringify({
+                type: 'CookieQuery',
+                cookie: cookie.current,
+                idSession: uuid
+              })
+            );
+          } else {
+            console.log('WS is null or undefined !');
+          }
+        };
 
-          case 'CookieExistsAlready':
-            console.log('data', data);
-            navigate('/formFinished');
-          // window.alert(data.cookieMessageToShowOnFrontend);
-        }
-      };
+        _ws.onmessage = (event: MessageEvent) => {
+          const data = JSON.parse(event.data);
 
-      fetchForm();
-    } else {
-      setError('Form ID is missing');
-      setLoading(false);
-    }
+          console.log('event.data.type', data.type);
+          switch (data.type) {
+            case 'CorrecAnswersQuestionCount':
+              //when {question count + correctAnswers}
+              console.log(data);
+              console.log({ data: data });
+              setAnswersAndQuestionCount(data);
+              break;
 
-    async function fetchForm() {
-      try {
-        const formFromDb: FormEntity = (await readFormularWithSessionId(
-          idSession
-        )) as unknown as FormEntity;
+            case 'CookieExistsAlready':
+              console.log('data', data);
+              navigate('/formFinished');
+            // window.alert(data.cookieMessageToShowOnFrontend);
+          }
+        };
 
-        const formFrontend =
-          convertFormEntityToFormularWithNoAnswersChecked(formFromDb);
-        setFormFrontend(formFrontend);
-      } catch (err) {
-        setError('Failed to load the form');
-      } finally {
+        fetchForm(uuid);
+
+        //searches in browser for a cookie, if it finds it it gets it, if it doesn't he creates one
+        cookie.current = checkOrSetUUID(uuid);
+      } else {
         setLoading(false);
+        setError('Form ID is missing');
       }
-    }
-  }, [idSession]);
+    });
+  }, []);
 
   function sendMessage(message: any) {
     if (_ws && _ws.readyState === WebSocket.OPEN) {
@@ -159,6 +182,7 @@ function FormClient() {
     }
   }
 
+  ////form logic///
   const chooseRightAnswer = (
     e: React.ChangeEvent<HTMLInputElement>,
     questionKey: string
@@ -215,6 +239,7 @@ function FormClient() {
   };
 
   if (loading) return <div>Loading...</div>;
+
   if (error) return <div>{error}</div>;
 
   return (
