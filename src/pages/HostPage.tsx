@@ -1,68 +1,88 @@
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import { AnswersChart } from "../components/AnswersChart";
-import { readSessionWithIdReturnsAnswers } from "../firebase/firestore";
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { AnswersChart } from '../components/AnswersChart';
+import {
+  readSessionWithIdReturnsAnswers,
+  
+  readSessionUUIDWith8DigitCode
+} from '../firebase/firestore';
+import { DigitsCodeEntity } from '../entities/digitsCodeEntity';
 
 const HostPage = () => {
-    const { hostId, sessionId } = useParams<{
-        hostId: string;
-        sessionId: string;
-    }>();
-    const [answerData, setAnswerData] = useState<Array<any>>([]);
-    const wsRef = useRef<WebSocket | null>(null);
+  const { hostId, sessionId } = useParams<{
+    hostId: string;
+    sessionId: string;
+  }>();
 
-    useEffect(() => {
-        if (sessionId && hostId) {
-            wsRef.current = new WebSocket("ws://localhost:3001");
+  const [idSession, setIdSession] = useState(sessionId || '');
+  const [answerData, setAnswerData] = useState<Array<any>>([]);
+  const wsRef = useRef<WebSocket | null>(null);
 
-            wsRef.current.onopen = () => {
-                const adminObject = {
-                    adminMessage: "Admin has connected",
-                    adminId: hostId,
-                    adminSession: sessionId,
-                    type:"AdminMessage"
-                };
+  async function getSessionUUIDUsing8DigitsCode(digitsCode: string) {
+    const sessionUUID: String =
+      ((await readSessionUUIDWith8DigitCode(digitsCode)) as DigitsCodeEntity)
+        .sessionID || '';
+    return sessionUUID;
+  }
 
-                // Initial data fetch
-                readSessionWithIdReturnsAnswers(sessionId).then((answers) => {
-                    console.log("Initial answers fetched:", answers);
-                    setAnswerData([...answers]);
-                });
-                
-                const dataToSend = JSON.stringify(adminObject);
-                
-                wsRef.current?.send(dataToSend);
-            };
+  useEffect(() => {
+    if (sessionId && hostId) {
 
-            wsRef.current.onmessage = async (event) => {
-                console.log("WebSocket message received:", event.data);
+      getSessionUUIDUsing8DigitsCode(idSession).then((uuidString) => {
+        const uuid = uuidString.toString();
+        wsRef.current = new WebSocket('ws://localhost:3001');
 
-                // Fetch updated answers
-                const answers = await readSessionWithIdReturnsAnswers(sessionId);
-                console.log("Updated answers fetched:", answers);
+        wsRef.current.onopen = () => {
+          const adminObject = {
+            adminMessage: 'Admin has connected',
+            adminId: hostId,
+            adminSession: uuid,
+            type: 'AdminMessage'
+          };
 
-                // Trigger state update
-                setAnswerData([...answers]);
-            };
-        }
+          // Initial data fetch
+          readSessionWithIdReturnsAnswers(uuid).then((answers) => {
+            console.log('Initial answers fetched:', answers);
+            setAnswerData([...answers]);
+          });
 
-        return () => {
-            if (wsRef.current) {
-                wsRef.current.close();
-                console.log("WebSocket connection closed");
-            }
+          const dataToSend = JSON.stringify(adminObject);
+
+          wsRef.current?.send(dataToSend);
         };
-    }, [sessionId, hostId]);
 
-    return (
-        <div>
-            <h1>Host Page</h1>
-            <p>Host ID: {hostId}</p>
-            <p>Session ID: {sessionId}</p>
+        wsRef.current.onmessage = async (event) => {
+          console.log('WebSocket message received:', event.data);
 
-            {answerData.length > 0 && <AnswersChart answersData={answerData} />}
-        </div>
-    );
+          // Fetch updated answers
+          const answers = await readSessionWithIdReturnsAnswers(uuid);
+          console.log('Updated answers fetched:', answers);
+
+          // Trigger state update
+          setAnswerData([...answers]);
+        };
+
+        setIdSession(uuid);
+      });
+    }
+
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close();
+        console.log('WebSocket connection closed');
+      }
+    };
+  }, []);
+
+  return (
+    <div>
+      <h1>Host Page</h1>
+      <p>Host ID: {hostId}</p>
+      <p>Session ID: {sessionId}</p>
+
+      {answerData.length > 0 && <AnswersChart answersData={answerData} />}
+    </div>
+  );
 };
 
 export default HostPage;
