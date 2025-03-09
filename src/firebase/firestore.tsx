@@ -1,14 +1,14 @@
 import {
-  collection,
-  addDoc,
-  query,
-  getDocs,
-  doc,
-  deleteDoc,
-  where,
-  updateDoc,
-  getDoc,
-  setDoc
+    collection,
+    addDoc,
+    query,
+    getDocs,
+    doc,
+    deleteDoc,
+    where,
+    updateDoc,
+    getDoc,
+    setDoc
 } from 'firebase/firestore';
 
 import { db } from './firebase';
@@ -28,29 +28,31 @@ const sessionCodes8Digits = collection(db, 'sessionsCode8Digits');
  *
  */
 const addFormDb = async (form: FormEntity) => {
-  try {
-    const insertedForm = await addDoc(formsRef, form);
+    try {
+        const insertedForm = await addDoc(formsRef, form);
 
-    const sessionId = createNewSessionReturnsIdSession(insertedForm.id);
+        const sessionId = createNewSessionReturnsIdSession(insertedForm.id);
 
-    return sessionId;
-  } catch (err) {
-    console.log(err);
-  }
+        return sessionId;
+    } catch (err) {
+        console.log(err);
+    }
 };
 
-const createNew8DigitsCodeSession = async (digitsCode: string, sessionCode: string) => {
+const createNew8DigitsCodeSession = async (
+    digitsCode: string,
+    sessionCode: string
+) => {
+    const data = { sessionID: sessionCode };
 
-  const data = { sessionID: sessionCode };
-
-  try {
-    await setDoc(doc(db, 'sessionsCode8Digits', digitsCode), data);
-    console.log('8 digits session created !  ');
-  } catch (err) {
-    //TODO: error handling on client side
-    window.alert(err);
-    console.log({ err });
-  }
+    try {
+        await setDoc(doc(db, 'sessionsCode8Digits', digitsCode), data);
+        console.log('8 digits session created !  ');
+    } catch (err) {
+        //TODO: error handling on client side
+        window.alert(err);
+        console.log({ err });
+    }
 };
 
 /**
@@ -59,61 +61,73 @@ const createNew8DigitsCodeSession = async (digitsCode: string, sessionCode: stri
  * @returns Id of the inserted session
  */
 const createNewSessionReturnsIdSession = async (formId: string) => {
-  const session: Session = {
-    idForm: formId,
-    date: new Date().toISOString(),
-    answers: []
-  };
+    const session: Session = {
+        idForm: formId,
+        date: new Date().toISOString(),
+        answers: []
+    };
 
-  const insertedSession = await addDoc(sessionsRef, session);
-  console.log('session created !! ', insertedSession.id);
-  return insertedSession.id;
+    const insertedSession = await addDoc(sessionsRef, session);
+    console.log('session created !! ', insertedSession.id);
+    return insertedSession.id;
 };
 
 // add a method to see the forms added
 const findAllForms = async () => {
-  const q = query(formsRef, where('host', '==', ''));
+    const q = query(formsRef, where('host', '==', ''));
 
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, ' => ', doc.data());
-  });
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, ' => ', doc.data());
+    });
 };
 
 //ex : host : YEfwrMFB2JdVran7Ea4z8sgE7642 --> all forms the user wrote
 //TODO: collection with []arrays so O(1)    [at insert time]
 const findFormsWithHostId = async (id: string): Promise<FormEntity[]> => {
-  const q = query(formsRef, where('host', '==', id));
-  const arrayOfForms: FormEntity[] = [];
-  const querySnapshot = await getDocs(q);
+    const q = query(formsRef, where('host', '==', id));
+    const arrayOfForms: FormEntity[] = [];
+    const querySnapshot = await getDocs(q);
 
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
-    data.id = doc.id;
-    // Ensure the data matches FormEntity
-    arrayOfForms.push(data as FormEntity);
-  });
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        data.id = doc.id;
+        // Ensure the data matches FormEntity
+        arrayOfForms.push(data as FormEntity);
+    });
 
-  return arrayOfForms;
+    return arrayOfForms;
 };
 
 const findFormWithFormId = async (idForm: string) => {
-  const formRef = doc(db, 'forms', idForm);
-  const docSnap = await getDoc(formRef);
-  // console.log(docSnap)
-  console.log(docSnap.data());
-  return docSnap.data();
+    const formRef = doc(db, 'forms', idForm);
+    const docSnap = await getDoc(formRef);
+    // console.log(docSnap)
+    console.log(docSnap.data());
+    return docSnap.data();
 };
 
 /**
  * takes id session and returns session
  */
 const readSessionUUIDWith8DigitCode = async (code8Digits: string) => {
-  const sessionCodesRef = doc(db, 'sessionsCode8Digits', code8Digits);
-  const docSnap = await getDoc(sessionCodesRef);
-  // console.log(docSnap.data());
-  return docSnap.data();
+    const sessionCodesRef = doc(db, 'sessionsCode8Digits', code8Digits);
+    const docSnap = await getDoc(sessionCodesRef);
+    // console.log(docSnap.data());
+    return docSnap.data();
+};
+
+const verifySessionUUIDWith8DigitCode = async (code8Digits: string) => {
+    const sessionCodesRef = doc(db, 'sessionsCode8Digits', code8Digits);
+    const docSnap = await getDoc(sessionCodesRef);
+
+    console.log(docSnap.data())
+
+    if (!docSnap.data()) {
+        return false;
+    }
+    return true;
 };
 
 // const readSessionUUIDWith8DigitCodeReturnsSessionId = async (code8Digits: string) => {
@@ -122,12 +136,10 @@ const readSessionUUIDWith8DigitCode = async (code8Digits: string) => {
 //     // console.log(docSnap.data());
 //     return docSnap.data();
 //   };
-  
 
-
-//TODO: Doua functii separate 
+//TODO: Doua functii separate
 //TODO: counter de coduri incercate + limita de timp
-async function verifyAndInsert8DigitsCode(code:string, sessionUUID:string){
+async function verifyAndInsert8DigitsCode(code: string, sessionUUID: string) {
     const session = await readSessionUUIDWith8DigitCode(code);
 
     if (!session) {
@@ -137,77 +149,76 @@ async function verifyAndInsert8DigitsCode(code:string, sessionUUID:string){
         return true;
     }
     return false;
-    
-
 }
 /**
  * takes id session and returns session
  */
 const readSessionWithId = async (idSession: string) => {
-  const sessionRef = doc(db, 'sessions', idSession);
-  const docSnap = await getDoc(sessionRef);
-  // console.log(docSnap.data());
-  return docSnap.data();
+    const sessionRef = doc(db, 'sessions', idSession);
+    const docSnap = await getDoc(sessionRef);
+    // console.log(docSnap.data());
+    return docSnap.data();
 };
 
 /**
  * takes id session and returns session.answer
  */
 const readSessionWithIdReturnsAnswers = async (
-  idSession: string | undefined
+    idSession: string | undefined
 ) => {
-  if (!idSession) {
-    return [];
-  }
+    if (!idSession) {
+        return [];
+    }
 
-  const sessionRef = doc(db, 'sessions', idSession);
-  const docSnap = await getDoc(sessionRef);
-  const answers = docSnap.data()?.answers || undefined;
-  console.log('firestore answers', answers);
-  return answers;
+    const sessionRef = doc(db, 'sessions', idSession);
+    const docSnap = await getDoc(sessionRef);
+    const answers = docSnap.data()?.answers || undefined;
+    console.log('firestore answers', answers);
+    return answers;
 };
 
 /**
  * takes id session and returns form
  */
 const readFormularWithSessionId = async (idSession: string) => {
-  // we get the session using the sessionId
-  const session = await readSessionWithId(idSession);
+    // we get the session using the sessionId
+    const session = await readSessionWithId(idSession);
 
-  //we get the form id from the session
-  const formId = session?.idForm;
-  const formRef = doc(db, 'forms', formId);
+    //we get the form id from the session
+    const formId = session?.idForm;
+    const formRef = doc(db, 'forms', formId);
 
-  //we get the form
-  const form = await getDoc(formRef);
+    //we get the form
+    const form = await getDoc(formRef);
 
-  console.log(form.data());
-  return form.data();
+    console.log(form.data());
+    return form.data();
 };
 
 //update
 const updateFormularName = async (idForm: string, newName: string) => {
-  const formRef = doc(db, 'forms', idForm);
+    const formRef = doc(db, 'forms', idForm);
 
-  await updateDoc(formRef, { name: newName });
+    await updateDoc(formRef, { name: newName });
 };
 
 //delete
 const deleteData = async (id: string) => {
-  await deleteDoc(doc(db, 'forms', `${id}`));
-  console.log('data has been deleted ');
+    await deleteDoc(doc(db, 'forms', `${id}`));
+    console.log('data has been deleted ');
 };
 export {
-  addFormDb,
-  findAllForms,
-  deleteData,
-  createNew8DigitsCodeSession,
-  readSessionUUIDWith8DigitCode,
-  findFormsWithHostId,
-  updateFormularName,
-  readFormularWithSessionId,
-  readSessionWithIdReturnsAnswers,
-  findFormWithFormId,
-  createNewSessionReturnsIdSession,
-  verifyAndInsert8DigitsCode
+    addFormDb,
+    findAllForms,
+    deleteData,
+    createNew8DigitsCodeSession,
+    readSessionUUIDWith8DigitCode,
+    findFormsWithHostId,
+    updateFormularName,
+    readFormularWithSessionId,
+    readSessionWithIdReturnsAnswers,
+    findFormWithFormId,
+    createNewSessionReturnsIdSession,
+    verifyAndInsert8DigitsCode,
+    verifySessionUUIDWith8DigitCode
 };

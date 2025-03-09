@@ -17,10 +17,12 @@ import { verifyAndInsert8DigitsCode } from '../firebase/firestore';
 export function DialogShare({
   sessionId,
   open,
+  userUid,
   setOpen
 }: {
   sessionId: string;
   open: boolean;
+  userUid: string;
   setOpen: (open: boolean) => void;
 }) {
 
@@ -52,6 +54,7 @@ export function DialogShare({
 
 
   const sessionLink = 'http://localhost:5173/session/' + newSessionCode8Digits;
+  const hostPageLink = 'http://localhost:5173/'+ "host/" + userUid + "/" + newSessionCode8Digits;
   
 	return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -69,12 +72,33 @@ export function DialogShare({
             </Label>
             <Input id="link" value={sessionLink} readOnly />
           </div>
+          
           <Button
             style={{ backgroundColor: '#5A3ED7' }}
             type="button"
             size="sm"
             className="px-3"
             onClick={() => navigator.clipboard.writeText(sessionLink)}
+          >
+            <span className="sr-only">Copy</span>
+            <Copy />
+          </Button>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <div className="grid flex-1 gap-2">
+            <Label htmlFor="link" className="sr-only">
+              Link
+            </Label>
+            <Input id="link" value={hostPageLink} readOnly />
+          </div>
+          
+          <Button
+            style={{ backgroundColor: '#5A3ED7' }}
+            type="button"
+            size="sm"
+            className="px-3"
+            onClick={() => navigator.clipboard.writeText(hostPageLink)}
           >
             <span className="sr-only">Copy</span>
             <Copy />

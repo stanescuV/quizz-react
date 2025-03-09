@@ -71,7 +71,7 @@ return (
             )}
         </div>
 
-        <DialogShare sessionId={sessionId} open={isDialogOpen} setOpen={setIsDialogOpen} />
+        <DialogShare sessionId={sessionId} open={isDialogOpen} setOpen={setIsDialogOpen} userUid = {currentUser.uid} />
     </div>
 );
 };
