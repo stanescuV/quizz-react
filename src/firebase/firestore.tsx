@@ -119,6 +119,8 @@ const readSessionUUIDWith8DigitCode = async (code8Digits: string) => {
 };
 
 const verifySessionUUIDWith8DigitCode = async (code8Digits: string) => {
+
+
     const sessionCodesRef = doc(db, 'sessionsCode8Digits', code8Digits);
     const docSnap = await getDoc(sessionCodesRef);
 

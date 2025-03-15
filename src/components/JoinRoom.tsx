@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { verifySessionUUIDWith8DigitCode } from '../firebase/firestore';
 
 import { ButtonLoading } from './shadcn-components/loader-button';
+import { number } from 'zod';
 
 export function JoinRoom() {
   const navigate = useNavigate();
@@ -13,7 +14,6 @@ export function JoinRoom() {
   const [isError, setIsError] = useState(false);
 
   async function makeUserWait2SecsBeforeNewSession() {
-
     function waitFor2Seconds() {
       return new Promise((resolve) => setTimeout(resolve, 2000));
     }
@@ -24,6 +24,13 @@ export function JoinRoom() {
   }
 
   async function verifyThenNavigate(digitsCode: string) {
+    if (digitsCode.length < 0 || !digitsCode) {
+      setIsLoading(false);
+      setIsError(true);
+      makeUserWait2SecsBeforeNewSession();
+      return;
+    }
+
     verifySessionUUIDWith8DigitCode(digitsCode).then((r) => {
       console.log({ r });
       if (!r) {

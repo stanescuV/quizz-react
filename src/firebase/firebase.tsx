@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, collection, addDoc, setDoc, doc } from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -42,7 +42,17 @@ async function signIn(email: string, password:string) {
   }
 }
 
+// Sign out of firebase
+async function singOut () {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+    console.log("User signed out successfully");
+  } catch (error) {
+    console.error("Error signing out:", error);
+  }
+};
 // Export Firebase utilities
-export { auth, createUser, signIn, db, app};
+export { auth, createUser, signIn, singOut, db, app};
 export default app;
 
