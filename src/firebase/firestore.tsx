@@ -14,13 +14,12 @@ import {
 import { db } from './firebase';
 import { FormEntity } from '../entities/formDB';
 import { Session } from '../entities/session';
-import { promise } from 'zod';
 
 //CRUD METHODS
 
 const formsRef = collection(db, 'forms');
 const sessionsRef = collection(db, 'sessions');
-const sessionCodes8Digits = collection(db, 'sessionsCode8Digits');
+// const sessionCodes8Digits = collection(db, 'sessionsCode8Digits');
 
 // use this to insert a form in the DB
 /** it inserts in the DB, forms in firestore

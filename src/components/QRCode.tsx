@@ -6,8 +6,7 @@ const QRCodeGenerator = (idForm: string) => {
 
   return (
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h2>QR Code</h2>
-        <div style={{ marginTop: '20px' }}>
+        <div >
           <QRCode value={idForm} size={256} />
         </div>
     </div>
