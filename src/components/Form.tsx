@@ -233,10 +233,12 @@ function Form({ document }: { document: Formular }) {
             return window.alert("The form is not completed correctly.");
         }
 
-        const uid = currentUser?.uid;
+        const uid = currentUser.uid;
         if (uid) {
+            //we convert the frontend type in a db type
             const dbForm = convertFormularToFormEntity(formular, formName, uid);
 
+            //TODO: schimba UUID in 8Digits
             // www.quizzReact.com/form/?id
             const urlForm = `/form/${(await addFormDb(dbForm)) as string}`; // Save form data to the database
             setIdForm("http://localhost:5173" + urlForm);

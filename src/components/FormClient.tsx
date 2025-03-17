@@ -163,6 +163,7 @@ function FormClient() {
     });
   }, []);
 
+  //we send the form via ws to server 
   function sendMessage(message: any) {
     if (_ws && _ws.readyState === WebSocket.OPEN) {
       //we add the type and the idSession in the form before sending it on WS
@@ -243,18 +244,19 @@ function FormClient() {
   if (error) return <div>{error}</div>;
 
   return (
-    <div>
-      <form>
+    <div className="max-w-lg mx-auto bg-white shadow-lg rounded-xl p-6">
+      <form className="space-y-4">
         {Object.keys(formFrontend).map((key) =>
           renderQuestion(formFrontend, key as keyof Formular)
         )}
         <button
           onClick={() => {
+            console.log("this is the form that im fkin sending",formFrontend)
             sendMessage(formFrontend);
             setIsAnswersDialogOpen(true);
           }}
           type="button"
-          className="mt-3 p-3 bg-blue-500 text-white rounded-lg"
+          className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200"
         >
           Submit
         </button>
