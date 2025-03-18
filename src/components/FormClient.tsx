@@ -61,15 +61,29 @@ function FormClient() {
   }
 
   //TODO: put it in entities / form logic
-  function convertFormFrontendIntoFormCookies(form: any) {
-    let newFormCookies: { [key: string]: any } = { id: form.id };
-
-    for (let key in form) {
-      if (key !== 'id' && form[key].selectedOption !== '') {
+  function convertFormFrontendIntoFormCookies(formData: any) {
+    if (!formData || typeof formData !== 'object' || !formData.form) {
+      console.error('Invalid form data:', formData);
+      return {};
+    }
+  
+    const form = formData.form; // Extract the actual form object
+    let newFormCookies: { [key: string]: any } = {};
+  
+    Object.keys(form).forEach((key) => {
+      if (
+        key !== 'idSession' && 
+        key !== 'type' &&
+        key !== 'formDbCookie' &&
+        key !== 'cookieId' &&
+        form[key] &&
+        typeof form[key] === 'object' &&
+        'selectedOption' in form[key]
+      ) {
         newFormCookies[key] = form[key].selectedOption;
       }
-    }
-
+    });
+  
     return newFormCookies;
   }
 
@@ -163,21 +177,23 @@ function FormClient() {
     });
   }, []);
 
-  //we send the form via ws to server 
+  //we send the form via ws to server
   function sendMessage(message: any) {
     if (_ws && _ws.readyState === WebSocket.OPEN) {
+      console.log(message);
       //we add the type and the idSession in the form before sending it on WS
       message = { ...message, idSession: idSession, type: 'UserAnswer' };
 
       const formCookie = convertFormFrontendIntoFormCookies(message);
-
       //adding the cookie in the message before sending it
       if (cookie.current) {
         message.formDbCookie = { [cookie.current]: formCookie };
         message.cookieId = cookie.current;
       }
+      console.log({formCookie});
 
       _ws.send(JSON.stringify(message));
+      console.log(message)
     } else {
       console.log('WebSocket connection is not open');
     }
@@ -251,7 +267,7 @@ function FormClient() {
         )}
         <button
           onClick={() => {
-            console.log("this is the form that im fkin sending",formFrontend)
+            console.log('this is the form that im fkin sending', formFrontend);
             sendMessage(formFrontend);
             setIsAnswersDialogOpen(true);
           }}

@@ -26,44 +26,44 @@ const HostPage = () => {
   }
 
   useEffect(() => {
-    if (sessionId && hostId) {
-      getSessionUUIDUsing8DigitsCode(idSession).then((uuidString) => {
-        const uuid = uuidString.toString();
-        wsRef.current = new WebSocket('ws://localhost:3001');
+    if (!sessionId || !hostId) return;
 
-        wsRef.current.onopen = () => {
-          const adminObject = {
-            adminMessage: 'Admin has connected',
-            adminId: hostId,
-            adminSession: uuid,
-            type: 'AdminMessage'
-          };
+    getSessionUUIDUsing8DigitsCode(idSession).then((uuidString) => {
+      const uuid = uuidString.toString();
+      wsRef.current = new WebSocket('ws://localhost:3001');
 
-          // Initial data fetch
-          readSessionWithIdReturnsAnswers(uuid).then((answers) => {
-            console.log('Initial answers fetched:', answers);
-            setAnswerData([...answers]);
-          });
-
-          const dataToSend = JSON.stringify(adminObject);
-
-          wsRef.current?.send(dataToSend);
+      wsRef.current.onopen = () => {
+        const adminObject = {
+          adminMessage: 'Admin has connected',
+          adminId: hostId,
+          adminSession: uuid,
+          type: 'AdminMessage'
         };
 
-        wsRef.current.onmessage = async (event) => {
-          console.log('WebSocket message received:', event.data);
-
-          // Fetch updated answers
-          const answers = await readSessionWithIdReturnsAnswers(uuid);
-          console.log('Updated answers fetched:', answers);
-
-          // Trigger state update
+        // Initial data fetch
+        readSessionWithIdReturnsAnswers(uuid).then((answers) => {
+          console.log('Initial answers fetched:', answers);
           setAnswerData([...answers]);
-        };
+        });
 
-        setIdSession(uuid);
-      });
-    }
+        const dataToSend = JSON.stringify(adminObject);
+
+        wsRef.current?.send(dataToSend);
+      };
+
+      wsRef.current.onmessage = async (event) => {
+        console.log('WebSocket message received:', event.data);
+
+        // Fetch updated answers
+        const answers = await readSessionWithIdReturnsAnswers(uuid);
+        console.log('Updated answers fetched:', answers);
+
+        // Trigger state update
+        setAnswerData([...answers]);
+      };
+
+      setIdSession(uuid);
+    });
 
     return () => {
       if (wsRef.current) {
