@@ -10,6 +10,7 @@ import HostPage from './pages/HostPage';
 import MyFormsPage from './pages/MyFormsPage';
 import FormFinishedRedirectPage from './pages/FormFinishedRedirectPage';
 import { Profile } from './components/Profile';
+import AIPage from './pages/AIPage';
 
 const App: React.FC = () => {
   return (
@@ -26,6 +27,9 @@ const App: React.FC = () => {
             <Route path="/host/:hostId?/:sessionId?" element={<HostPage />} />
             <Route path="/myforms" element={<MyFormsPage />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/ai" element={<AIPage />} />
+
+            
 
             <Route
               path="/formFinished"

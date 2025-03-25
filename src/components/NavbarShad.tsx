@@ -11,7 +11,7 @@ import LoginAvatar from './LoginAvatar';
 import { useAuth } from '../firebase/authContext';
 
 export default function NavbarShad() {
-  const navbarItems = ['Forms', 'Templates', 'MyForms', 'Pricing'];
+  const navbarItems = ['Forms', 'Templates', 'MyForms', 'Pricing', 'AI'];
   const navigate = useNavigate();
   //get current user
   const { currentUser } = useAuth();
