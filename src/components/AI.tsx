@@ -1,30 +1,36 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 function AI() {
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useState('');
 
   const handleSubmit = async () => {
     if (!inputText.trim()) return;
-    
+
     try {
-      const response = await fetch("http://localhost:3003/generate-form", {
-        method: "POST",
+      const response = await fetch('http://localhost:3003/generate-form', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ prompt: inputText }),
+        body: JSON.stringify({ prompt: inputText })
       });
 
       const data = await response.json();
-      console.log("Response:", data);
+      const formFromResponse = JSON.parse(
+        data.form.choices[0].message.content
+      ).formular;
+      console.log('Formular:', formFromResponse);
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
 
   return (
     <div className="p-10 flex flex-col justify-center items-center ">
-      <h2 className="font-pops font-xl mt-10 mb-10"> Create your own Promt using AI</h2>
+      <h2 className="font-pops font-xl mt-10 mb-10">
+        {' '}
+        Create your own Promt using AI
+      </h2>
       <input
         type="text"
         value={inputText}
