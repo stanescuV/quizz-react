@@ -13,6 +13,7 @@ import { FormEntity } from "../entities/formDB";
 // import { useNavigate } from 'react-router-dom';
 
 function Form({ document }: { document: Formular }) {
+    const url = import.meta.env.VITE_FRONTEND_URL;
     //URL PARAMS
     const { id } = useParams<{ id: string }>();
     const idFormUrl = id || "";
@@ -241,7 +242,7 @@ function Form({ document }: { document: Formular }) {
             //TODO: schimba UUID in 8Digits
             // www.quizzReact.com/form/?id
             const urlForm = `/form/${(await addFormDb(dbForm)) as string}`; // Save form data to the database
-            setIdForm("http://localhost:5173" + urlForm);
+            setIdForm(`${url}` + urlForm);
             // navigate(urlForm);
 
             console.log("Form submitted:", dbForm);

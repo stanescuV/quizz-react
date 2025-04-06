@@ -13,6 +13,14 @@ import { Profile } from './components/Profile';
 import AIPage from './pages/AIPage';
 
 const App: React.FC = () => {
+  const url = import.meta.env.VITE_FRONTEND_URL;
+  console.log(url);
+
+  const http = import.meta.env.VITE_HTTP_SERVER_URL;
+  console.log(http);
+
+  const ws = import.meta.env.VITE_WS_SERVER_URL;
+  console.log(ws);
   return (
     <div className="bg-[#6e4fff]">
       <AuthProvider>

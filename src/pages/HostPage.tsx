@@ -9,6 +9,9 @@ import { DigitsCodeEntity } from '../entities/digitsCodeEntity';
 import QRCodeGenerator from '../components/QRCode';
 
 const HostPage = () => {
+
+  const wsURL = import.meta.env.VITE_WS_SERVER_URL
+
   const { hostId, sessionId } = useParams<{
     hostId: string;
     sessionId: string;
@@ -30,7 +33,7 @@ const HostPage = () => {
 
     getSessionUUIDUsing8DigitsCode(idSession).then((uuidString) => {
       const uuid = uuidString.toString();
-      wsRef.current = new WebSocket('ws://localhost:3001');
+      wsRef.current = new WebSocket(wsURL);
 
       wsRef.current.onopen = () => {
         const adminObject = {

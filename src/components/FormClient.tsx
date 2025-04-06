@@ -13,6 +13,7 @@ import { DigitsCodeEntity } from '../entities/digitsCodeEntity';
 
 ////////////// WebSocket instance
 let _ws: WebSocket | null = null;
+const wsURL = import.meta.env.VITE_WS_SERVER_URL
 
 ////////////////////COOKIE LOGIC ////////////////////////////
 function getCookie(name: string) {
@@ -131,7 +132,7 @@ function FormClient() {
 
       if (uuid) {
         //open ws to get form data via server
-        _ws = new WebSocket('ws://localhost:3001');
+        _ws = new WebSocket(wsURL);
 
         _ws.onopen = () => {
           if (_ws) {

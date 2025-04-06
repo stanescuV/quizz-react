@@ -4,11 +4,13 @@ import { Input } from './shadcn-components/input';
 function AI() {
   const [inputText, setInputText] = useState('');
 
+  const serverURL = import.meta.env.VITE_HTTP_SERVER_URL
+
   const handleSubmit = async () => {
     if (!inputText.trim()) return;
 
     try {
-      fetch('http://localhost:3003/generate-form', {
+      fetch(`${serverURL}/generate-form`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -25,14 +25,13 @@ export function DialogShare({
   userUid: string;
   setOpen: (open: boolean) => void;
 }) {
+  const url = import.meta.env.VITE_FRONTEND_URL;
 
-
-  function create8DigitsCode() :string {
+  function create8DigitsCode(): string {
     let code = '';
 
     for (let number = 0; number < 8; number++) {
-			
-			//takes a random digit
+      //takes a random digit
       let newNumber = String(Math.random())[3];
 
       code += newNumber;
@@ -42,21 +41,20 @@ export function DialogShare({
     return code;
   }
 
-	let newSessionCode8Digits = create8DigitsCode();
+  let newSessionCode8Digits = create8DigitsCode();
 
-	verifyAndInsert8DigitsCode(newSessionCode8Digits, sessionId).then((r)=>{
-		if(!r){
-			newSessionCode8Digits = create8DigitsCode();
-			verifyAndInsert8DigitsCode(newSessionCode8Digits, sessionId);
-		}
-	})
+  verifyAndInsert8DigitsCode(newSessionCode8Digits, sessionId).then((r) => {
+    if (!r) {
+      newSessionCode8Digits = create8DigitsCode();
+      verifyAndInsert8DigitsCode(newSessionCode8Digits, sessionId);
+    }
+  });
 
+  const sessionLink = `${url}session/` + newSessionCode8Digits;
+  const hostPageLink =
+    `${url}` + 'host/' + userUid + '/' + newSessionCode8Digits;
 
-
-  const sessionLink = 'http://localhost:5173/session/' + newSessionCode8Digits;
-  const hostPageLink = 'http://localhost:5173/'+ "host/" + userUid + "/" + newSessionCode8Digits;
-  
-	return (
+  return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -72,7 +70,7 @@ export function DialogShare({
             </Label>
             <Input id="link" value={sessionLink} readOnly />
           </div>
-          
+
           <Button
             style={{ backgroundColor: '#5A3ED7' }}
             type="button"
@@ -92,7 +90,7 @@ export function DialogShare({
             </Label>
             <Input id="link" value={hostPageLink} readOnly />
           </div>
-          
+
           <Button
             style={{ backgroundColor: '#5A3ED7' }}
             type="button"
