@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { verifySessionUUIDWith8DigitCode } from '../firebase/firestore';
 
 import { ButtonLoading } from './shadcn-components/loader-button';
-import { number } from 'zod';
 
 export function JoinRoom() {
   const navigate = useNavigate();

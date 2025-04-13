@@ -10,10 +10,6 @@ function SignUser({}: Props) {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    //TODO: callable passwordSecure
-    const isPasswordSecure = () => {
-
-    }
     const handleLogin = (event: React.FormEvent) => {
         event.preventDefault();
 

@@ -34,13 +34,6 @@ const testIfQuestionEmpty = (formular: Formular) => {
 }
   
 
-const testIfNameEmpty = (formName: string) => {
-    if(formName !== ""){
-        return true
-    };
-
-    return false; 
-}
 
 
 const tests = [testSelectedOption, testIfOptionEmpty, testIfQuestionEmpty];
