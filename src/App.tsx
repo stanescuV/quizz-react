@@ -1,7 +1,7 @@
 import './App.css';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
-import Login from './pages/LogIn';
+import Login from './pages/Login';
 import { AuthProvider } from './firebase/authContext';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import FormClient from './components/FormClient';
