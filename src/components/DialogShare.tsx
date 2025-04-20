@@ -50,9 +50,9 @@ export function DialogShare({
     }
   });
 
-  const sessionLink = `${url}session/` + newSessionCode8Digits;
+  const sessionLink = `${url}/session/` + newSessionCode8Digits;
   const hostPageLink =
-    `${url}` + 'host/' + userUid + '/' + newSessionCode8Digits;
+    `${url}` + '/host/' + userUid + '/' + newSessionCode8Digits;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

@@ -7,7 +7,6 @@ import {
 } from '../firebase/firestore';
 import { FormEntity } from '../entities/formDB';
 import { useNavigate } from 'react-router-dom';
-
 import { DialogShare } from './DialogShare';
 
 const MyForms = () => {
